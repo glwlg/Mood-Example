@@ -160,6 +160,176 @@ class S {
     );
   }
 
+  /// `Security`
+  String get app_setting_security {
+    return Intl.message(
+      'Security',
+      name: 'app_setting_security',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You need to unlock the app when you reopen it.`
+  String get app_setting_security_content {
+    return Intl.message(
+      'You need to unlock the app when you reopen it.',
+      name: 'app_setting_security_content',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Security lock`
+  String get app_setting_security_lock {
+    return Intl.message(
+      'Security lock',
+      name: 'app_setting_security_lock',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `TouchID / FaceID auth`
+  String get app_setting_security_biometric_weak {
+    return Intl.message(
+      'TouchID / FaceID auth',
+      name: 'app_setting_security_biometric_weak',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Iris auth`
+  String get app_setting_security_biometric_iris {
+    return Intl.message(
+      'Iris auth',
+      name: 'app_setting_security_biometric_iris',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Face auth`
+  String get app_setting_security_biometric_face {
+    return Intl.message(
+      'Face auth',
+      name: 'app_setting_security_biometric_face',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fingerprint auth`
+  String get app_setting_security_biometric_fingerprint {
+    return Intl.message(
+      'Fingerprint auth',
+      name: 'app_setting_security_biometric_fingerprint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set password`
+  String get app_setting_security_lock_title_1 {
+    return Intl.message(
+      'Set password',
+      name: 'app_setting_security_lock_title_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm password`
+  String get app_setting_security_lock_title_2 {
+    return Intl.message(
+      'Confirm password',
+      name: 'app_setting_security_lock_title_2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get app_setting_security_lock_cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'app_setting_security_lock_cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset input`
+  String get app_setting_security_lock_resetinput {
+    return Intl.message(
+      'Reset input',
+      name: 'app_setting_security_lock_resetinput',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The two passwords are inconsistent`
+  String get app_setting_security_lock_error_1 {
+    return Intl.message(
+      'The two passwords are inconsistent',
+      name: 'app_setting_security_lock_error_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Security lock`
+  String get app_setting_security_lock_screen_title {
+    return Intl.message(
+      'Security lock',
+      name: 'app_setting_security_lock_screen_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please identify`
+  String get app_setting_security_localauth_localizedreason {
+    return Intl.message(
+      'Please identify',
+      name: 'app_setting_security_localauth_localizedreason',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Authentication required`
+  String get app_setting_security_localauth_signIntitle {
+    return Intl.message(
+      'Authentication required',
+      name: 'app_setting_security_localauth_signIntitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get app_setting_security_localauth_cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'app_setting_security_localauth_cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You have failed many times, please try again later`
+  String get app_setting_security_localauth_error_1 {
+    return Intl.message(
+      'You have failed many times, please try again later',
+      name: 'app_setting_security_localauth_error_1',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Theme`
   String get app_setting_theme {
     return Intl.message(
@@ -790,71 +960,61 @@ class S {
     );
   }
 
-  /// `Notification Click`
-  String get local_notification_dialog_welcome_title {
+  /// `Notifications`
+  String get local_notification_dialog_allow_title {
     return Intl.message(
-      'Notification Click',
-      name: 'local_notification_dialog_welcome_title',
+      'Notifications',
+      name: 'local_notification_dialog_allow_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `payload: {payload}`
-  String local_notification_dialog_welcome_content(Object payload) {
+  /// `Allow Notifications?`
+  String get local_notification_dialog_allow_content {
     return Intl.message(
-      'payload: $payload',
-      name: 'local_notification_dialog_welcome_content',
-      desc: '',
-      args: [payload],
-    );
-  }
-
-  /// `OK`
-  String get local_notification_dialog_welcome_ok {
-    return Intl.message(
-      'OK',
-      name: 'local_notification_dialog_welcome_ok',
+      'Allow Notifications?',
+      name: 'local_notification_dialog_allow_content',
       desc: '',
       args: [],
     );
   }
 
-  /// `Hi`
-  String get local_notification_mood_title {
+  /// `Cancel`
+  String get local_notification_dialog_allow_cancel {
     return Intl.message(
-      'Hi',
-      name: 'local_notification_mood_title',
+      'Cancel',
+      name: 'local_notification_dialog_allow_cancel',
       desc: '',
       args: [],
     );
   }
 
-  /// `If you click this notification, a schedule notification will be notified in 5 seconds.`
-  String get local_notification_mood_body {
+  /// `Settings`
+  String get local_notification_dialog_allow_confirm {
     return Intl.message(
-      'If you click this notification, a schedule notification will be notified in 5 seconds.',
-      name: 'local_notification_mood_body',
+      'Settings',
+      name: 'local_notification_dialog_allow_confirm',
       desc: '',
       args: [],
     );
   }
 
-  /// `Hi~ I am a scheduled notification`
-  String get local_notification_schedule_mood_title {
+  /// `📅 Scheduling a Notification`
+  String get local_notification_schedule_title {
     return Intl.message(
-      'Hi~ I am a scheduled notification',
-      name: 'local_notification_schedule_mood_title',
+      '📅 Scheduling a Notification',
+      name: 'local_notification_schedule_title',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
-  String get local_notification_schedule_mood_body {
+  /// `Every 1 minute`
+  String get local_notification_schedule_body {
     return Intl.message(
-      '',
-      name: 'local_notification_schedule_mood_body',
+      'Every 1 minute',
+      name: 'local_notification_schedule_body',
       desc: '',
       args: [],
     );

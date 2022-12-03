@@ -12,6 +12,24 @@
     "app_setting_database_import_data_toast_error":"导入失败，请下载错误数据，修改后再试。",
     "app_setting_database_import_data_toast_success":"导入成功",
 
+    "app_setting_security":"安全",
+    "app_setting_security_content":"重新打开应用时需要进行解锁。",
+    "app_setting_security_lock":"密码锁",
+    "app_setting_security_biometric_weak":"指纹、面部等识别",
+    "app_setting_security_biometric_iris":"虹膜识别",
+    "app_setting_security_biometric_face":"面部识别",
+    "app_setting_security_biometric_fingerprint":"指纹识别",
+    "app_setting_security_lock_title_1":"设置密码",
+    "app_setting_security_lock_title_2":"再次输入确认密码",
+    "app_setting_security_lock_cancel":"关闭",
+    "app_setting_security_lock_resetinput":"重新输入",
+    "app_setting_security_lock_error_1":"两次密码不一致",
+    "app_setting_security_lock_screen_title":"输入密码解锁",
+    "app_setting_security_localauth_localizedreason":"请进行识别",
+    "app_setting_security_localauth_signIntitle":"身份认证",
+    "app_setting_security_localauth_cancel":"取消",
+    "app_setting_security_localauth_error_1":"失败多次，请稍后重试",
+
     "app_setting_theme":"主题",
     "app_setting_theme_appearance":"主题外观",
     "app_setting_theme_appearance_system":"跟随系统",
@@ -91,11 +109,10 @@
 
     "local_notification_welcome_title": "👋 欢迎来到这里",
     "local_notification_welcome_body": "进入给你发送一条通知，证明通知已初始化。",
-    "local_notification_dialog_welcome_title": "通知点击",
-    "local_notification_dialog_welcome_content": "payload 返回值: {payload}",
-    "local_notification_dialog_welcome_ok": "OK",
-    "local_notification_mood_title": "查看",
-    "local_notification_mood_body": "如果点击这条通知，那么将会在 5 秒后通知一条计划通知。",
-    "local_notification_schedule_mood_title": "Hi~ 我是定时计划通知",
-    "local_notification_schedule_mood_body": "我就是那位 5 秒后的计划通知。"
+    "local_notification_dialog_allow_title": "通知权限",
+    "local_notification_dialog_allow_content": "打开权限后通知才会生效",
+    "local_notification_dialog_allow_cancel": "取消",
+    "local_notification_dialog_allow_confirm": "前往设置",
+    "local_notification_schedule_title": "📅 定时计划通知",
+    "local_notification_schedule_body": "每1分钟你将看见此通知"
 }

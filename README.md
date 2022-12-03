@@ -10,15 +10,15 @@
 </h1> 
 
 <p align="center">
-<a target="_blank" href="/CHANGELOG.md"><img alt="Mood-Example v1.7.7" src="https://img.shields.io/badge/Mood--Example-v1.7.7-3e4663"/></a> 
-<a target="_blank" href="https://flutter.dev/"><img alt="Flutter v3.3.8" src="https://img.shields.io/badge/Flutter-v3.3.8-46D1FD"/></a> 
-<a target="_blank" href="https://dart.dev/"><img alt="Dart v2.18.4" src="https://img.shields.io/badge/Dart-v2.18.4-04599D"/></a> 
+<a target="_blank" href="/CHANGELOG.md"><img alt="Mood-Example v1.7.10" src="https://img.shields.io/badge/Mood--Example-v1.7.10-3e4663"/></a> 
+<a target="_blank" href="https://flutter.dev/"><img alt="Flutter v3.3.9" src="https://img.shields.io/badge/Flutter-v3.3.9-46D1FD"/></a> 
+<a target="_blank" href="https://dart.dev/"><img alt="Dart v2.18.5" src="https://img.shields.io/badge/Dart-v2.18.5-04599D"/></a> 
 <a target="_blank" href="https://github.com/AmosHuKe/Mood-Example/blob/main/LICENSE"><img alt="BSD-3-Clause License" src="https://img.shields.io/badge/license-BSD--3--Clause-green"/></a> 
 </p> 
 
 
 `情绪记录` 样例工程  
-管理自己的情绪，记录当下所见所想，以及其他`实验室`功能（不定时更新一些小实验）  
+管理自己的情绪，记录当下所见所想，以及其他`实验室`功能（不定时更新一些功能）  
 运用 `Flutter` 的实践工程，主要目的是学习、实践。  
 > 注意：由于是学习实践工程，所以重点在于学习，许多业务逻辑可能并不符合现实。  
 > Emoji因设备缘故，会存在不同样式。  
@@ -46,14 +46,13 @@
 - [x] Excel 导入导出  
 - [x] 无障碍支持（Semantics）  
 - [x] Web 访问  
+- [x] 解锁认证（锁屏密码、生物特征识别）  
 - [x] 本地通知  
 - [x] 动画  
 - [x] 实验室（占用 APP 大部分包体积，源码位置查看项目结构）  
   - [x] uniapp 小程序（UniMPSDK v3.4.7）  
   - [x] 3D 城市（obj 格式）  
   - [x] 游戏合集（Flame、Bonfire）  
-  ……  
-- [ ] 隐私解锁  
 ……
 
 
@@ -67,12 +66,12 @@
 
 ## 🛠️ 开发环境
 
-### 基本环境  
+### 🛠️ 基本环境  
 
 > Windows  
 ```
-[√] Flutter (Channel stable, 3.3.8, on Microsoft Windows [版本 10.0.22000.1098], locale zh-CN)
-[√] Android toolchain - develop for Android devices (Android SDK version 31.0.0)
+[√] Flutter (Channel stable, 3.3.9, on Microsoft Windows [版本 10.0.22000.1219], locale zh-CN)
+[√] Android toolchain - develop for Android devices (Android SDK version 33.0.1)
 [√] Visual Studio - develop for Windows (Visual Studio Community 2022 17.4.0)
 [√] Android Studio (version 2021.3)
 [√] VS Code (version 1.70.0)
@@ -80,15 +79,15 @@
 
 > macOS  
 ```
-[✓] Flutter (Channel stable, 3.3.8, on macOS 13.0 22A380 darwin-x64, locale zh-Hans-CN)
+[✓] Flutter (Channel stable, 3.3.9, on macOS 13.0 22A380 darwin-x64, locale zh-Hans-CN)
 [✓] Android toolchain - develop for Android devices (Android SDK version 33.0.0)
 [✓] Xcode - develop for iOS and macOS (Xcode 14.1)
 [✓] Android Studio (version 2021.3)
-[✓] VS Code (version 1.73.0)
+[✓] VS Code (version 1.73.1)
 ```  
 
 
-### 国际化环境支持  
+### 🛠️ 国际化环境支持  
 
 安装编辑器插件：`Flutter Intl`  
 > Visual Studio Code: [Flutter Intl](https://marketplace.visualstudio.com/items?itemName=localizely.flutter-intl)   
@@ -193,7 +192,8 @@ $ flutter test integration_test/app_test.dart
 │   └── Podfile                                     # 依赖配置
 ├── lib                                             # 工程相关文件（主要编码）
 │   ├── common                                      # 公共相关
-│   │   ├── local_notifications.dart                # 本地通知
+│   │   ├── local_auth_utils.dart                   # 本地认证（生物特征识别）
+│   │   ├── notification.dart                       # 本地通知
 │   │   ├── utils_intl.dart                         # 国际化工具
 │   │   └── utils.dart                              # 工具
 │   ├── config                                      # 配置
@@ -241,7 +241,7 @@ $ flutter test integration_test/app_test.dart
 
 ## 🤔️ 常见问题  
 
-### Q: 在 iOS 无法打开 uni小程序或无法使用 UniMPSDK  
+### **Q: 在 iOS 无法打开 uni小程序或无法使用 UniMPSDK**  
 <details>
 <summary>点击展开</summary>
 
@@ -269,6 +269,17 @@ $ flutter test integration_test/app_test.dart
 * [官方 UniMPSDK iOS 集成教程](https://nativesupport.dcloud.net.cn/UniMPDocs/UseSdk/ios)  
 </details>
 
+### **Q: 在 APP 关闭后，通知失效**  
+<details>
+<summary>点击展开</summary>
+
+> 在确认应用开启了通知的情况下，关闭 APP 后依旧无法通知。  
+> 这是因为部分品牌 Android 默认使用了电池节能策略。  
+
+解决：关闭应用的电池节能策略，并打开自启动
+
+</details>
+
 
 ## 🖼️ Illustration
 
@@ -283,41 +294,43 @@ Illustration by <a target="_blank" href="https://icons8.com/illustrations/author
 * Bogusław Podhalicz. [Mindfulness Concept App](https://dribbble.com/shots/15733031-Mindfulness-Concept-App)  
 
 
-## Packages 许可证  
+## 📦 Packages  
 
 感谢开源  
 
 | Packages | License |  
 |---|---|  
-| [provider](https://pub.dev/packages/provider) | [MIT License](https://pub.dev/packages/provider/license) |  
+| [bonfire](https://pub.dev/packages/bonfire) | [MIT License](https://pub.dev/packages/bonfire/license) |  
+| [card_swiper](https://pub.dev/packages/card_swiper) | [MIT License](https://pub.dev/packages/card_swiper/license) |  
+| [cupertino_icons](https://pub.dev/packages/cupertino_icons) | [MIT License](https://pub.dev/packages/cupertino_icons/license) |  
+| [ditredi](https://pub.dev/packages/ditredi) | [MIT License](https://pub.dev/packages/ditredi/license) |  
+| [excel](https://pub.dev/packages/excel) | [MIT License](https://pub.dev/packages/excel/license) |  
 | [fluro](https://pub.dev/packages/fluro) | [MIT License](https://pub.dev/packages/fluro/license) |  
-| [flutter_zoom_drawer](https://pub.dev/packages/flutter_zoom_drawer) | [MIT License](https://pub.dev/packages/flutter_zoom_drawer/license) |  
+| [file_picker](https://pub.dev/packages/file_picker) | [MIT License](https://pub.dev/packages/file_picker/license) |  
 | [fluttertoast](https://pub.dev/packages/fluttertoast) | [MIT License](https://pub.dev/packages/fluttertoast/license) |  
 | [flutter_slidable](https://pub.dev/packages/flutter_slidable) | [MIT License](https://pub.dev/packages/flutter_slidable/license) |  
-| [card_swiper](https://pub.dev/packages/card_swiper) | [MIT License](https://pub.dev/packages/card_swiper/license) |  
-| [excel](https://pub.dev/packages/excel) | [MIT License](https://pub.dev/packages/excel/license) |  
-| [cupertino_icons](https://pub.dev/packages/cupertino_icons) | [MIT License](https://pub.dev/packages/cupertino_icons/license) |  
+| [flutter_zoom_drawer](https://pub.dev/packages/flutter_zoom_drawer) | [MIT License](https://pub.dev/packages/flutter_zoom_drawer/license) |  
+| [flutter_screen_lock](https://pub.dev/packages/flutter_screen_lock) | [MIT License](https://pub.dev/packages/flutter_screen_lock/license) |  
+| [provider](https://pub.dev/packages/provider) | [MIT License](https://pub.dev/packages/provider/license) |  
 | [remixicon](https://pub.dev/packages/remixicon) | [MIT License](https://pub.dev/packages/remixicon/license) |  
-| [file_picker](https://pub.dev/packages/file_picker) | [MIT License](https://pub.dev/packages/file_picker/license) |  
-| [ditredi](https://pub.dev/packages/ditredi) | [MIT License](https://pub.dev/packages/ditredi/license) |  
-| [bonfire](https://pub.dev/packages/bonfire) | [MIT License](https://pub.dev/packages/bonfire/license) |  
+| [awesome_notifications](https://pub.dev/packages/awesome_notifications) | [Apache-2.0 License](https://pub.dev/packages/awesome_notifications/license) |  
 | [flutter_screenutil](https://pub.dev/packages/flutter_screenutil) | [Apache-2.0 License](https://pub.dev/packages/flutter_screenutil/license) |  
-| [table_calendar](https://pub.dev/packages/table_calendar) | [Apache-2.0 License](https://pub.dev/packages/table_calendar/license) |  
 | [flutter_native_timezone](https://pub.dev/packages/flutter_native_timezone) | [Apache-2.0 License](https://pub.dev/packages/flutter_native_timezone/license) |  
+| [table_calendar](https://pub.dev/packages/table_calendar) | [Apache-2.0 License](https://pub.dev/packages/table_calendar/license) |  
 | [sqflite](https://pub.dev/packages/sqflite) | [BSD-2-Clause License](https://pub.dev/packages/sqflite/license) |  
 | [vibration](https://pub.dev/packages/vibration) | [BSD-2-Clause License](https://pub.dev/packages/vibration/license) |  
-| [shared_preferences](https://pub.dev/packages/shared_preferences) | [BSD-3-Clause License](https://pub.dev/packages/shared_preferences/license) |  
-| [path_provider](https://pub.dev/packages/path_provider) | [BSD-3-Clause License](https://pub.dev/packages/path_provider/license) |  
-| [intl](https://pub.dev/packages/intl) | [BSD-3-Clause License](https://pub.dev/packages/intl/license) |  
+| [animations](https://pub.dev/packages/animations) | [BSD-3-Clause License](https://pub.dev/packages/animations/license) |  
 | [fl_chart](https://pub.dev/packages/fl_chart) | [BSD-3-Clause License](https://pub.dev/packages/fl_chart/license) |  
 | [flutter_lints](https://pub.dev/packages/flutter_lints) | [BSD-3-Clause License](https://pub.dev/packages/flutter_lints/license) |  
+| [intl](https://pub.dev/packages/intl) | [BSD-3-Clause License](https://pub.dev/packages/intl/license) |  
+| [local_auth](https://pub.dev/packages/local_auth) | [BSD-3-Clause License](https://pub.dev/packages/local_auth/license) |  
+| [path_provider](https://pub.dev/packages/path_provider) | [BSD-3-Clause License](https://pub.dev/packages/path_provider/license) |  
 | [share_plus](https://pub.dev/packages/share_plus) | [BSD-3-Clause License](https://pub.dev/packages/share_plus/license) |  
+| [shared_preferences](https://pub.dev/packages/shared_preferences) | [BSD-3-Clause License](https://pub.dev/packages/shared_preferences/license) |  
 | [webview_flutter](https://pub.dev/packages/webview_flutter) | [BSD-3-Clause License](https://pub.dev/packages/webview_flutter/license) |  
-| [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) | [BSD-3-Clause License](https://pub.dev/packages/flutter_local_notifications/license) |  
-| [animations](https://pub.dev/packages/animations) | [BSD-3-Clause License](https://pub.dev/packages/animations/license) |  
 
 
-## License 许可证
+## 📄 License
 
 [![BSD-3-Clause License](https://img.shields.io/badge/license-BSD--3--Clause-green)](https://github.com/AmosHuKe/Mood-Example/blob/main/LICENSE)  
 Open sourced under the BSD-3-Clause license.  

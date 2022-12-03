@@ -1,3 +1,12 @@
+# 1.7.10
+- [新增] 解锁认证（锁屏密码、生物特征识别）  
+
+# 1.7.9
+- [升级] Flutter 3.3.9  
+- [新增] Schedule 定时计划通知  
+- [修改] 本地通知库 flutter_local_notifications 更换为 awesome_notifications  
+- [Bug 修复] 语言设置存储错误  
+
 # 1.7.7
 - [升级] Flutter 3.3.8  
 - [新增] 应用后台显示名称  

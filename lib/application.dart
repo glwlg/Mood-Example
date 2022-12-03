@@ -8,6 +8,7 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:moodexample/generated/l10n.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 ///
 import 'package:moodexample/themes/app_theme.dart';
@@ -16,7 +17,8 @@ import 'package:moodexample/db/preferences_db.dart';
 import 'package:moodexample/routes.dart';
 import 'package:moodexample/widgets/will_pop_scope_route/will_pop_scope_route.dart';
 import 'package:moodexample/home_screen.dart';
-import 'package:moodexample/common/local_notifications.dart';
+import 'package:moodexample/common/notification.dart';
+import 'package:moodexample/widgets/lock_screen/lock_screen.dart';
 
 /// view_model
 import 'package:moodexample/view_models/mood/mood_view_model.dart';
@@ -107,9 +109,9 @@ class Init extends StatefulWidget {
   State<Init> createState() => _InitState();
 }
 
-class _InitState extends State<Init> {
+class _InitState extends State<Init> with WidgetsBindingObserver {
   /// 应用初始化
-  void init(BuildContext context) async {
+  void init() async {
     MoodViewModel moodViewModel =
         Provider.of<MoodViewModel>(context, listen: false);
     ApplicationViewModel applicationViewModel =
@@ -117,6 +119,9 @@ class _InitState extends State<Init> {
 
     /// 初始化数据库
     await DB.db.database;
+
+    /// 锁屏
+    runLockScreen();
 
     /// 设置心情类别默认值
     final bool setMoodCategoryDefaultresult =
@@ -137,58 +142,146 @@ class _InitState extends State<Init> {
 
     /// 触发获取APP地区语言是否跟随系统
     PreferencesDB().getAppIsLocaleSystem(applicationViewModel);
+
+    /// 通知权限判断显示
+    allowedNotification();
   }
 
-  /// 发送通知
-  void sendNotification(BuildContext context) {
-    LocalNotifications(
-        onSelectNotification: ({payload}) => onSelectNotification(payload))
-      ..init()
-      ..send(
-        0,
-        S.of(context).local_notification_welcome_title,
-        S.of(context).local_notification_welcome_body,
-        payload: 'localNotificationsInit',
-        channelId: ChannelID.init,
-        channelName: '进入应用',
-      );
+  /// 锁屏
+  void runLockScreen() async {
+    if (!mounted) return;
+    lockScreen(context);
   }
 
-  /// 点击通知时触发
-  void onSelectNotification(String? payload) {
-    showDialog(
+  /// 通知权限
+  static Future<bool> displayNotificationRationale(BuildContext context) async {
+    bool userAuthorized = false;
+    await showCupertinoDialog<void>(
       context: context,
-      builder: (context) => Theme(
+      builder: (BuildContext context) => Theme(
         data: isDarkMode(context) ? ThemeData.dark() : ThemeData.light(),
         child: CupertinoAlertDialog(
-          title: Text(S.of(context).local_notification_dialog_welcome_title),
-          content: Text(S
-              .of(context)
-              .local_notification_dialog_welcome_content(payload!)),
-          actions: [
+          key: const Key("notification_rationale_dialog"),
+          title: Text(S.of(context).local_notification_dialog_allow_title),
+          content: Text(S.of(context).local_notification_dialog_allow_content),
+          actions: <CupertinoDialogAction>[
             CupertinoDialogAction(
-              isDefaultAction: true,
-              child: Text(S.of(context).local_notification_dialog_welcome_ok),
-              onPressed: () async {
-                Navigator.of(context, rootNavigator: true).pop();
+              key: const Key("notification_rationale_close"),
+              child: Text(S.of(context).local_notification_dialog_allow_cancel),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            CupertinoDialogAction(
+              key: const Key("notification_rationale_ok"),
+              child:
+                  Text(S.of(context).local_notification_dialog_allow_confirm),
+              onPressed: () {
+                userAuthorized = true;
+                Navigator.pop(context);
               },
             )
           ],
         ),
       ),
     );
+    return userAuthorized &&
+        await AwesomeNotifications().requestPermissionToSendNotifications();
+  }
+
+  /// 通知权限判断显示
+  void allowedNotification() async {
+    bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+    if (!isAllowed) {
+      if (!mounted) return;
+      isAllowed = await displayNotificationRationale(context);
+    }
+  }
+
+  /// 发送普通通知
+  void sendNotification() async {
+    bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+    if (!isAllowed) return;
+    if (!mounted) return;
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 1,
+        channelKey: 'notification',
+        title: S.of(context).local_notification_welcome_title,
+        body: S.of(context).local_notification_welcome_body,
+        actionType: ActionType.Default,
+        category: NotificationCategory.Event,
+      ),
+    );
+  }
+
+  /// 发送定时计划通知
+  void sendScheduleNotification() async {
+    String localTimeZone =
+        await AwesomeNotifications().getLocalTimeZoneIdentifier();
+    bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+    if (!isAllowed) return;
+    if (!mounted) return;
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: -1, // 随机ID
+        channelKey: 'notification',
+        title: S.of(context).local_notification_schedule_title,
+        body: S.of(context).local_notification_schedule_body,
+        actionType: ActionType.Default,
+        category: NotificationCategory.Event,
+      ),
+      schedule: NotificationCalendar(
+        second: 0, // 当秒到达0时将会通知，意味着每个分钟的整点会通知
+        timeZone: localTimeZone,
+        allowWhileIdle: true,
+        preciseAlarm: true,
+        repeats: true,
+      ),
+    );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        debugPrint("app 恢复");
+        break;
+      case AppLifecycleState.inactive:
+        debugPrint("app 闲置");
+        break;
+      case AppLifecycleState.paused:
+        debugPrint("app 暂停");
+
+        /// 锁屏
+        runLockScreen();
+        break;
+      case AppLifecycleState.detached:
+        debugPrint("app 退出");
+        break;
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    init(context);
+    WidgetsBinding.instance.addObserver(this);
+    init();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    sendNotification(context);
-    return const MenuPage();
+    /// 通知
+    NotificationController.cancelNotifications();
+    sendNotification();
+    sendScheduleNotification();
+    return const MenuPage(key: Key("widget_menu_page"));
   }
 }
 

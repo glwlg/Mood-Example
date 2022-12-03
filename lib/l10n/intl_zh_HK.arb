@@ -12,6 +12,24 @@
     "app_setting_database_import_data_toast_error":"導入失敗，請下載錯誤數據，修改後再試。",
     "app_setting_database_import_data_toast_success":"導入成功",
 
+    "app_setting_security":"安全",
+    "app_setting_security_content":"重新打開應用時需要進行解鎖。",
+    "app_setting_security_lock":"密碼鎖",
+    "app_setting_security_biometric_weak":"指紋、面部等識別",
+    "app_setting_security_biometric_iris":"虹膜識別",
+    "app_setting_security_biometric_face":"面部識別",
+    "app_setting_security_biometric_fingerprint":"指紋識別",
+    "app_setting_security_lock_title_1":"設置密碼",
+    "app_setting_security_lock_title_2":"再次輸入確認密碼",
+    "app_setting_security_lock_cancel":"關閉",
+    "app_setting_security_lock_resetinput":"重新輸入",
+    "app_setting_security_lock_error_1":"兩次密碼不一致",
+    "app_setting_security_lock_screen_title":"輸入密碼解鎖",
+    "app_setting_security_localauth_localizedreason":"請進行識別",
+    "app_setting_security_localauth_signIntitle":"身份認證",
+    "app_setting_security_localauth_cancel":"取消",
+    "app_setting_security_localauth_error_1":"失敗多次，請稍後重試",
+
     "app_setting_theme":"主題",
     "app_setting_theme_appearance":"主題外觀",
     "app_setting_theme_appearance_system":"跟隨系統",
@@ -91,11 +109,10 @@
 
     "local_notification_welcome_title": "👋 歡迎來到這裏",
     "local_notification_welcome_body": "進入給你發送一條通知，證明通知已初始化。",
-    "local_notification_dialog_welcome_title": "通知點擊",
-    "local_notification_dialog_welcome_content": "payload 返回值: {payload}",
-    "local_notification_dialog_welcome_ok": "OK",
-    "local_notification_mood_title": "查看",
-    "local_notification_mood_body": "如果點擊這條通知，那麼將會在 5 秒後通知一條計劃通知。",
-    "local_notification_schedule_mood_title": "Hi~ 我是定時計劃通知",
-    "local_notification_schedule_mood_body": "我就是那位 5 秒後的計劃通知。"
+    "local_notification_dialog_allow_title": "通知權限",
+    "local_notification_dialog_allow_content": "打開權限後通知才會生效",
+    "local_notification_dialog_allow_cancel": "取消",
+    "local_notification_dialog_allow_confirm": "前往設置",
+    "local_notification_schedule_title": "📅 定時計劃通知",
+    "local_notification_schedule_body": "每1分鐘你將看見此通知"
 }

@@ -35,6 +35,12 @@ class PreferencesDB {
   /// APP地区语言是否跟随系统
   static const appIsLocaleSystem = "appIsLocaleSystem";
 
+  /// 安全-密码
+  static const appKeyPassword = "appKeyPassword";
+
+  /// 安全-生物特征识别是否开启
+  static const appKeyBiometric = "appKeyBiometric";
+
   /*** 数据库相关 ***/
   /// 是否填充完成【心情类别】表默认值
   static const initMoodCategoryDefaultType = "initMoodCategoryDefaultType";
@@ -93,9 +99,9 @@ class PreferencesDB {
     SharedPreferences prefs = await init();
     debugPrint(locale);
     await setAppIsLocaleSystem(applicationViewModel, false);
-    final appLocale = locale ?? "zh";
-    final appLocaleList = appLocale.split('_');
-    prefs.setString(appLocale, appLocale);
+    final appLocaleSystem = locale ?? "zh";
+    final appLocaleList = appLocaleSystem.split('_');
+    prefs.setString(appLocale, appLocaleSystem);
     applicationViewModel.setLocale(Locale(
         appLocaleList[0], appLocaleList.length > 1 ? appLocaleList[1] : ''));
   }
@@ -125,5 +131,39 @@ class PreferencesDB {
     bool getAppIsLocaleSystem = prefs.getBool(appIsLocaleSystem) ?? true;
     applicationViewModel.setLocaleSystem(getAppIsLocaleSystem);
     return getAppIsLocaleSystem;
+  }
+
+  /// 设置-安全-密码
+  Future setAppKeyPassword(
+      ApplicationViewModel applicationViewModel, String keyPassword) async {
+    SharedPreferences prefs = await init();
+    prefs.setString(appKeyPassword, keyPassword);
+    applicationViewModel.setKeyPassword(keyPassword);
+  }
+
+  /// 获取-安全-密码
+  Future<String> getAppKeyPassword(
+      ApplicationViewModel applicationViewModel) async {
+    SharedPreferences prefs = await init();
+    String getAppKeyPassword = prefs.getString(appKeyPassword) ?? "";
+    applicationViewModel.setKeyPassword(getAppKeyPassword);
+    return getAppKeyPassword;
+  }
+
+  /// 设置-安全-生物特征识别是否开启
+  Future setAppKeyBiometric(
+      ApplicationViewModel applicationViewModel, bool keyBiometric) async {
+    SharedPreferences prefs = await init();
+    prefs.setBool(appKeyBiometric, keyBiometric);
+    applicationViewModel.setKeyBiometric(keyBiometric);
+  }
+
+  /// 获取-安全-生物特征识别是否开启
+  Future<bool> getAppKeyBiometric(
+      ApplicationViewModel applicationViewModel) async {
+    SharedPreferences prefs = await init();
+    bool getAppKeyBiometric = prefs.getBool(appKeyBiometric) ?? false;
+    applicationViewModel.setKeyBiometric(getAppKeyBiometric);
+    return getAppKeyBiometric;
   }
 }

@@ -20,21 +20,19 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh_CN';
 
-  static String m0(payload) => "payload 返回值: ${payload}";
+  static String m0(moodDays) => "按${moodDays}日计算情绪波动";
 
-  static String m1(moodDays) => "按${moodDays}日计算情绪波动";
+  static String m1(moodScoreAverage) => "平均${moodScoreAverage}";
 
-  static String m2(moodScoreAverage) => "平均${moodScoreAverage}";
+  static String m2(moodDays) => "近${moodDays}日情绪波动";
 
-  static String m3(moodDays) => "近${moodDays}日情绪波动";
+  static String m3(moodDays) => "近${moodDays}日心情数量统计";
 
-  static String m4(moodDays) => "近${moodDays}日心情数量统计";
+  static String m4(daysCount) => "${daysCount}天";
 
-  static String m5(daysCount) => "${daysCount}天";
+  static String m5(moodCount) => "${moodCount}条";
 
-  static String m6(moodCount) => "${moodCount}条";
-
-  static String m7(moodScoreAverage) => "${moodScoreAverage}";
+  static String m6(moodScoreAverage) => "${moodScoreAverage}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -64,6 +62,39 @@ class MessageLookup extends MessageLookupByLibrary {
         "app_setting_language": MessageLookupByLibrary.simpleMessage("语言"),
         "app_setting_language_system":
             MessageLookupByLibrary.simpleMessage("跟随系统"),
+        "app_setting_security": MessageLookupByLibrary.simpleMessage("安全"),
+        "app_setting_security_biometric_face":
+            MessageLookupByLibrary.simpleMessage("面部识别"),
+        "app_setting_security_biometric_fingerprint":
+            MessageLookupByLibrary.simpleMessage("指纹识别"),
+        "app_setting_security_biometric_iris":
+            MessageLookupByLibrary.simpleMessage("虹膜识别"),
+        "app_setting_security_biometric_weak":
+            MessageLookupByLibrary.simpleMessage("指纹、面部等识别"),
+        "app_setting_security_content":
+            MessageLookupByLibrary.simpleMessage("重新打开应用时需要进行解锁。"),
+        "app_setting_security_localauth_cancel":
+            MessageLookupByLibrary.simpleMessage("取消"),
+        "app_setting_security_localauth_error_1":
+            MessageLookupByLibrary.simpleMessage("失败多次，请稍后重试"),
+        "app_setting_security_localauth_localizedreason":
+            MessageLookupByLibrary.simpleMessage("请进行识别"),
+        "app_setting_security_localauth_signIntitle":
+            MessageLookupByLibrary.simpleMessage("身份认证"),
+        "app_setting_security_lock":
+            MessageLookupByLibrary.simpleMessage("密码锁"),
+        "app_setting_security_lock_cancel":
+            MessageLookupByLibrary.simpleMessage("关闭"),
+        "app_setting_security_lock_error_1":
+            MessageLookupByLibrary.simpleMessage("两次密码不一致"),
+        "app_setting_security_lock_resetinput":
+            MessageLookupByLibrary.simpleMessage("重新输入"),
+        "app_setting_security_lock_screen_title":
+            MessageLookupByLibrary.simpleMessage("输入密码解锁"),
+        "app_setting_security_lock_title_1":
+            MessageLookupByLibrary.simpleMessage("设置密码"),
+        "app_setting_security_lock_title_2":
+            MessageLookupByLibrary.simpleMessage("再次输入确认密码"),
         "app_setting_theme": MessageLookupByLibrary.simpleMessage("主题"),
         "app_setting_theme_appearance":
             MessageLookupByLibrary.simpleMessage("主题外观"),
@@ -89,19 +120,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "home_upgrade_content":
             MessageLookupByLibrary.simpleMessage("了解最新使用场景"),
         "home_upgrade_title": MessageLookupByLibrary.simpleMessage("功能更新"),
-        "local_notification_dialog_welcome_content": m0,
-        "local_notification_dialog_welcome_ok":
-            MessageLookupByLibrary.simpleMessage("OK"),
-        "local_notification_dialog_welcome_title":
-            MessageLookupByLibrary.simpleMessage("通知点击"),
-        "local_notification_mood_body": MessageLookupByLibrary.simpleMessage(
-            "如果点击这条通知，那么将会在 5 秒后通知一条计划通知。"),
-        "local_notification_mood_title":
-            MessageLookupByLibrary.simpleMessage("查看"),
-        "local_notification_schedule_mood_body":
-            MessageLookupByLibrary.simpleMessage("我就是那位 5 秒后的计划通知。"),
-        "local_notification_schedule_mood_title":
-            MessageLookupByLibrary.simpleMessage("Hi~ 我是定时计划通知"),
+        "local_notification_dialog_allow_cancel":
+            MessageLookupByLibrary.simpleMessage("取消"),
+        "local_notification_dialog_allow_confirm":
+            MessageLookupByLibrary.simpleMessage("前往设置"),
+        "local_notification_dialog_allow_content":
+            MessageLookupByLibrary.simpleMessage("打开权限后通知才会生效"),
+        "local_notification_dialog_allow_title":
+            MessageLookupByLibrary.simpleMessage("通知权限"),
+        "local_notification_schedule_body":
+            MessageLookupByLibrary.simpleMessage("每1分钟你将看见此通知"),
+        "local_notification_schedule_title":
+            MessageLookupByLibrary.simpleMessage("📅 定时计划通知"),
         "local_notification_welcome_body":
             MessageLookupByLibrary.simpleMessage("进入给你发送一条通知，证明通知已初始化。"),
         "local_notification_welcome_title":
@@ -149,23 +179,23 @@ class MessageLookup extends MessageLookupByLibrary {
         "statistic_filter_15d": MessageLookupByLibrary.simpleMessage("15天"),
         "statistic_filter_30d": MessageLookupByLibrary.simpleMessage("30天"),
         "statistic_filter_7d": MessageLookupByLibrary.simpleMessage("7天"),
-        "statistic_moodScoreAverage_content": m1,
-        "statistic_moodScoreAverage_title": m2,
-        "statistic_moodScore_content": m3,
+        "statistic_moodScoreAverage_content": m0,
+        "statistic_moodScoreAverage_title": m1,
+        "statistic_moodScore_content": m2,
         "statistic_moodScore_title":
             MessageLookupByLibrary.simpleMessage("情绪波动"),
-        "statistic_moodStatistics_content": m4,
+        "statistic_moodStatistics_content": m3,
         "statistic_moodStatistics_title":
             MessageLookupByLibrary.simpleMessage("心情统计"),
         "statistic_overall_daysCount_subTitle":
             MessageLookupByLibrary.simpleMessage("累计记录天数"),
-        "statistic_overall_daysCount_title": m5,
+        "statistic_overall_daysCount_title": m4,
         "statistic_overall_moodCount_subTitle":
             MessageLookupByLibrary.simpleMessage("累计记录心情"),
-        "statistic_overall_moodCount_title": m6,
+        "statistic_overall_moodCount_title": m5,
         "statistic_overall_moodScoreAverage_subTitle":
             MessageLookupByLibrary.simpleMessage("平均全部波动"),
-        "statistic_overall_moodScoreAverage_title": m7,
+        "statistic_overall_moodScoreAverage_title": m6,
         "statistic_title": MessageLookupByLibrary.simpleMessage("统计"),
         "web_view_loading_text": MessageLookupByLibrary.simpleMessage("加载中"),
         "widgets_will_pop_scope_route_toast":
