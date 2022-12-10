@@ -26,7 +26,7 @@ class _MiniGamePageState extends State<MiniGamePage> {
     // 按横屏计算
     ScreenUtil.init(
       context,
-      designSize: const Size(AppTheme.hdp, AppTheme.wdp),
+      designSize: Size(AppTheme.hdp, AppTheme.wdp),
     );
     return Theme(
       data: ThemeData(),

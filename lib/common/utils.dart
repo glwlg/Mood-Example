@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -18,11 +19,21 @@ String getDatetimeNow(format) {
   return formattedDate.toString();
 }
 
+String getDateStringCN(datetime) {
+  return DateFormat('yyyy年MM月dd日').format(datetime);
+}
 /// 震动
 Future<void> vibrate() async {
   debugPrint("~~~ 震动 ~~~");
+  if (isPC) {
+      return;
+  }
   Vibration.vibrate(duration: 10);
 }
+
+final bool isPC = (Platform.isWindows || Platform.isMacOS || Platform.isLinux);
+
+
 
 /// 统计颜色块
 const List<Color> statisticColors = [

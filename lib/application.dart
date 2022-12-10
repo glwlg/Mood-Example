@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moodexample/common/utils.dart';
+import 'package:moodexample/view_models/lifespan/lifespan_view_model.dart';
 
 /// Package
 import 'package:provider/provider.dart';
@@ -28,6 +30,7 @@ import 'package:moodexample/view_models/application/application_view_model.dart'
 
 /// 页面
 import 'package:moodexample/views/menu_screen/menu_screen_left.dart';
+import 'package:window_manager/window_manager.dart';
 
 class Application extends StatefulWidget {
   const Application({Key? key}) : super(key: key);
@@ -36,7 +39,19 @@ class Application extends StatefulWidget {
   State<Application> createState() => _ApplicationState();
 }
 
-class _ApplicationState extends State<Application> {
+class _ApplicationState extends State<Application> with WindowListener {
+  @override
+  void initState() {
+    windowManager.addListener(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    windowManager.removeListener(this);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     /// 路由
@@ -49,6 +64,7 @@ class _ApplicationState extends State<Application> {
         ChangeNotifierProvider(create: (_) => MoodViewModel()),
         ChangeNotifierProvider(create: (_) => StatisticViewModel()),
         ChangeNotifierProvider(create: (_) => ApplicationViewModel()),
+        ChangeNotifierProvider(create: (_) => LifespanViewModel()),
       ],
       builder: (context, child) {
         final watchApplicationViewModel = context.watch<ApplicationViewModel>();
@@ -100,6 +116,18 @@ class _ApplicationState extends State<Application> {
       },
     );
   }
+
+  @override
+  void onWindowResize() async{
+    Size size = await windowManager.getSize();
+    debugPrint("onWindowResize size:$size");
+  }
+
+  @override
+  void onWindowEvent(String eventName) {
+    debugPrint('[WindowManager] onWindowEvent: $eventName');
+  }
+
 }
 
 class Init extends StatefulWidget {
@@ -224,7 +252,8 @@ class _InitState extends State<Init> with WidgetsBindingObserver {
     if (!mounted) return;
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: -1, // 随机ID
+        id: -1,
+        // 随机ID
         channelKey: 'notification',
         title: S.of(context).local_notification_schedule_title,
         body: S.of(context).local_notification_schedule_body,
@@ -232,7 +261,8 @@ class _InitState extends State<Init> with WidgetsBindingObserver {
         category: NotificationCategory.Event,
       ),
       schedule: NotificationCalendar(
-        second: 0, // 当秒到达0时将会通知，意味着每个分钟的整点会通知
+        second: 0,
+        // 当秒到达0时将会通知，意味着每个分钟的整点会通知
         timeZone: localTimeZone,
         allowWhileIdle: true,
         preciseAlarm: true,
@@ -301,7 +331,7 @@ class _MenuPageState extends State<MenuPage> {
     /// 屏幕自适应 设置尺寸（填写设计中设备的屏幕尺寸）如果设计基于360dp * 690dp的屏幕
     ScreenUtil.init(
       context,
-      designSize: const Size(AppTheme.wdp, AppTheme.hdp),
+      designSize: Size(AppTheme.wdp, AppTheme.hdp),
     );
 
     return Consumer<ApplicationViewModel>(
@@ -339,6 +369,7 @@ class MainScreenBody extends StatefulWidget {
 class _MainScreenBodyState extends State<MainScreenBody> {
   /// 默认状态 为关闭
   ValueNotifier<DrawerState> drawerState = ValueNotifier(DrawerState.closed);
+
   @override
   Widget build(BuildContext context) {
     /// 监听状态进行改变

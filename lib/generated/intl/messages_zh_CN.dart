@@ -38,6 +38,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "app_bottomNavigationBar_title_home":
             MessageLookupByLibrary.simpleMessage("首页"),
+        "app_bottomNavigationBar_title_lifespan":
+            MessageLookupByLibrary.simpleMessage("人生"),
         "app_bottomNavigationBar_title_mood":
             MessageLookupByLibrary.simpleMessage("心情"),
         "app_bottomNavigationBar_title_statistic":
@@ -120,6 +122,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "home_upgrade_content":
             MessageLookupByLibrary.simpleMessage("了解最新使用场景"),
         "home_upgrade_title": MessageLookupByLibrary.simpleMessage("功能更新"),
+        "lifespan_title": MessageLookupByLibrary.simpleMessage("人生"),
         "local_notification_dialog_allow_cancel":
             MessageLookupByLibrary.simpleMessage("取消"),
         "local_notification_dialog_allow_confirm":

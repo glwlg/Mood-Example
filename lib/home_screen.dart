@@ -16,6 +16,9 @@ import 'package:moodexample/views/home/index.dart';
 import 'package:moodexample/views/mood/index.dart';
 import 'package:moodexample/views/statistic/index.dart';
 
+import 'views/lifespan/index.dart';
+import 'views/web_view/web_view.dart';
+
 /// 首页底部Tabbar
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -48,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     const HomePage(),
     const MoodPage(),
     const StatisticPage(),
+    const LifespanPage(),
   ];
 
   @override
@@ -92,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     //屏幕自适应 设置尺寸（填写设计中设备的屏幕尺寸）如果设计基于360dp * 690dp的屏幕
     ScreenUtil.init(
       context,
-      designSize: const Size(AppTheme.wdp, AppTheme.hdp),
+      designSize: Size(AppTheme.wdp, AppTheme.hdp),
     );
     ThemeData appTheme = Theme.of(context);
 
@@ -156,6 +160,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     text: S.of(context).app_bottomNavigationBar_title_statistic,
                     icon: Icon(
                       Remix.bar_chart_line,
+                      size: _tabIconSize,
+                    ),
+                  ),
+                  Tab(
+                    key: const Key("tab_life"),
+                    text: S.of(context).app_bottomNavigationBar_title_lifespan,
+                    icon: Icon(
+                      Remix.lifebuoy_fill,
                       size: _tabIconSize,
                     ),
                   ),

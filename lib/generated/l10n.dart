@@ -80,6 +80,16 @@ class S {
     );
   }
 
+  /// `Lifespan`
+  String get app_bottomNavigationBar_title_lifespan {
+    return Intl.message(
+      'Lifespan',
+      name: 'app_bottomNavigationBar_title_lifespan',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Database`
   String get app_setting_database {
     return Intl.message(
@@ -1015,6 +1025,16 @@ class S {
     return Intl.message(
       'Every 1 minute',
       name: 'local_notification_schedule_body',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lifespan`
+  String get lifespan_title {
+    return Intl.message(
+      'Lifespan',
+      name: 'lifespan_title',
       desc: '',
       args: [],
     );

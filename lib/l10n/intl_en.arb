@@ -2,7 +2,8 @@
     "app_bottomNavigationBar_title_home": "Home",
     "app_bottomNavigationBar_title_mood": "Mood",
     "app_bottomNavigationBar_title_statistic": "Statistic",
-    
+    "app_bottomNavigationBar_title_lifespan": "Lifespan",
+
     "app_setting_database":"Database",
     "app_setting_database_export_data":"Export data",
     "app_setting_database_export_data_toast_success":"Export succeeded",
@@ -114,5 +115,8 @@
     "local_notification_dialog_allow_cancel": "Cancel",
     "local_notification_dialog_allow_confirm": "Settings",
     "local_notification_schedule_title": "📅 Scheduling a Notification",
-    "local_notification_schedule_body": "Every 1 minute"
+    "local_notification_schedule_body": "Every 1 minute",
+
+    "lifespan_title": "Lifespan"
+
 }    

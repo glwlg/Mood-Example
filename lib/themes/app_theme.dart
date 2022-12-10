@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:moodexample/common/utils.dart';
 
 ///
 import 'package:provider/provider.dart';
@@ -57,8 +59,15 @@ class AppTheme {
   AppTheme(this.multipleThemesMode);
 
   /// 设备参考大小
-  static const double wdp = 360.0;
-  static const double hdp = 690.0;
+  // static const double wdp = 360.0;
+  // static const double hdp = 690.0;
+  static double get wdp {
+    return isPC ? 1024 : 360.0;
+  }
+
+  static double get hdp {
+    return isPC ? 960 : 690.0;
+  }
 
   /// 次要颜色
   static const subColor = Color(0xFFAFB8BF);

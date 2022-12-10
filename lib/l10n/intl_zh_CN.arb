@@ -2,6 +2,7 @@
     "app_bottomNavigationBar_title_home": "首页",
     "app_bottomNavigationBar_title_mood": "心情",
     "app_bottomNavigationBar_title_statistic": "统计",
+    "app_bottomNavigationBar_title_lifespan": "人生",
 
     "app_setting_database":"数据",
     "app_setting_database_export_data":"导出数据",
@@ -114,5 +115,8 @@
     "local_notification_dialog_allow_cancel": "取消",
     "local_notification_dialog_allow_confirm": "前往设置",
     "local_notification_schedule_title": "📅 定时计划通知",
-    "local_notification_schedule_body": "每1分钟你将看见此通知"
+    "local_notification_schedule_body": "每1分钟你将看见此通知",
+
+
+    "lifespan_title": "人生"
 }

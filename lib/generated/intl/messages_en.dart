@@ -39,6 +39,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "app_bottomNavigationBar_title_home":
             MessageLookupByLibrary.simpleMessage("Home"),
+        "app_bottomNavigationBar_title_lifespan":
+            MessageLookupByLibrary.simpleMessage("Lifespan"),
         "app_bottomNavigationBar_title_mood":
             MessageLookupByLibrary.simpleMessage("Mood"),
         "app_bottomNavigationBar_title_statistic":
@@ -130,6 +132,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "home_upgrade_content": MessageLookupByLibrary.simpleMessage(
             "Learn the latest\nusage scenarios"),
         "home_upgrade_title": MessageLookupByLibrary.simpleMessage("Upgrade"),
+        "lifespan_title": MessageLookupByLibrary.simpleMessage("Lifespan"),
         "local_notification_dialog_allow_cancel":
             MessageLookupByLibrary.simpleMessage("Cancel"),
         "local_notification_dialog_allow_confirm":

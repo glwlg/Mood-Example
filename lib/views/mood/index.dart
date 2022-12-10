@@ -55,7 +55,7 @@ class _MoodPageState extends State<MoodPage>
     // 屏幕自适应 设置尺寸（填写设计中设备的屏幕尺寸）如果设计基于360dp * 690dp的屏幕
     ScreenUtil.init(
       context,
-      designSize: const Size(AppTheme.wdp, AppTheme.hdp),
+      designSize: Size(AppTheme.wdp, AppTheme.hdp),
     );
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,

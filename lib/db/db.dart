@@ -1,4 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:moodexample/common/utils.dart';
+import 'package:moodexample/db/database/table_lifespan_info.dart';
+import 'package:moodexample/models/lifespan/lifespan_model.dart';
 import 'package:path/path.dart';
 
 ///
@@ -11,6 +15,7 @@ import 'package:moodexample/db/database/table_mood_info_category.dart';
 ///
 import 'package:moodexample/models/mood/mood_category_model.dart';
 import 'package:moodexample/models/mood/mood_model.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class DB {
   DB._();
@@ -18,12 +23,18 @@ class DB {
   late Database _db;
 
   /// 数据库版本号
-  final _version = 1;
+  final _version = 3;
 
   /// 数据库名称
   final _databaseName = "moodDB.db";
 
   Future<Database> get database async {
+    if (isPC) {
+      // Initialize FFI
+      sqfliteFfiInit();
+      // Change the default factory
+      databaseFactory = databaseFactoryFfi;
+    }
     _db = await createDatabase();
     return _db;
   }
@@ -51,6 +62,11 @@ class DB {
     /// 心情分类表
     batch.execute(TableMoodInfoCategory().dropTable);
     batch.execute(TableMoodInfoCategory().createTable);
+
+    batch.execute(TableLifespanInfo().dropTable);
+    batch.execute(TableLifespanInfo().createTable);
+    batch.insert(TableLifespanInfo.tableName, lifespanIntData.toJson());
+
     await batch.commit();
   }
 
@@ -62,6 +78,8 @@ class DB {
     var batch = db.batch();
 
     /// 升级逻辑
+    batch.execute(TableLifespanInfo().createTable);
+    batch.insert(TableLifespanInfo.tableName, lifespanIntData.toJson());
 
     await batch.commit();
   }
@@ -222,4 +240,43 @@ class DB {
     );
     return count;
   }
+
+  /// 查询寿命参数
+  ///
+  ///
+  Future<List> selectLifespan() async {
+    final db = await database;
+    List list = await db.query(
+      TableLifespanInfo.tableName,
+    );
+    return list;
+  }
+
+  /// 新增心情详情
+  Future<bool> insertLifespan(LifespanData lifespanData) async {
+    final db = await database;
+    int result =
+        await db.insert(TableLifespanInfo.tableName, lifespanData.toJson());
+    return result > 0;
+  }
+
+  /// 修改心情详情
+  Future<bool> updateLifespan(LifespanData lifespanData) async {
+    final db = await database;
+    int result = await db.update(
+      TableLifespanInfo.tableName,
+      lifespanData.toJson(),
+      where: "${TableLifespanInfo.fieldId} = ?",
+      whereArgs: [lifespanData.id],
+    );
+    return result > 0;
+  }
+
+  LifespanData lifespanIntData = LifespanData(
+      id: 1,
+      birthDay: "1990-01-01",
+      life: 90,
+      createTime: DateTime.now().toString().substring(0, 10),
+      updateTime: DateTime.now());
+
 }
