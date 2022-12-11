@@ -1,15 +1,16 @@
+import 'dart:math';
+
+import 'package:decimal/decimal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 /// Packages
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:moodexample/models/calculator/calculator_model.dart';
-import 'package:moodexample/models/lifespan/lifespan_model.dart';
-import 'package:moodexample/services/lifespan/lifespan_service.dart';
 import 'package:moodexample/view_models/calculator/calculator_view_model.dart';
-import 'package:moodexample/view_models/lifespan/lifespan_view_model.dart';
+import 'package:moodexample/widgets/calculator_button/calculator_button.dart';
+import 'package:moodexample/widgets/calculator_input/calculator_input.dart';
+import 'package:moodexample/widgets/calculator_result/calculator_result.dart';
 import 'package:provider/provider.dart';
 
 ///
@@ -76,92 +77,46 @@ class CalculatorBody extends StatefulWidget {
 class _CalculatorBodyState extends State<CalculatorBody> {
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      physics: const AlwaysScrollableScrollPhysics(
-        parent: BouncingScrollPhysics(),
-      ),
-      primary: false,
-      shrinkWrap: false,
-      slivers: [
-        SliverAppBar(
-          pinned: false,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          flexibleSpace: Align(
-            child: Container(
-              margin: EdgeInsets.only(
-                left: 24.w,
-                right: 24.w,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Text(
-                      S.of(context).calculator_title,
-                      style: Theme.of(context).textTheme.headline1?.copyWith(
-                            fontSize: 36.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                      semanticsLabel: S
-                          .of(context)
-                          .app_bottomNavigationBar_title_calculator,
-                    ),
+    return Scaffold(
+      body: Container(
+        margin: EdgeInsets.only(
+          top: 20.w,
+          left: 24.w,
+          right: 24.w,
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Text(
+                    S.of(context).calculator_title,
+                    style: Theme.of(context).textTheme.headline1?.copyWith(
+                          fontSize: 36.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                    semanticsLabel:
+                        S.of(context).app_bottomNavigationBar_title_calculator,
                   ),
-                  Image.asset(
-                    "assets/images/woolly/woolly-heart.png",
-                    height: 60.w,
-                    excludeFromSemantics: true,
-                  ),
-                ],
-              ),
+                ),
+                Image.asset(
+                  "assets/images/woolly/woolly-heart.png",
+                  height: 60.w,
+                  excludeFromSemantics: true,
+                ),
+              ],
             ),
-          ),
-          collapsedHeight: 100.w,
-          expandedHeight: 100.w,
+            Row(
+              children: const [
+                Expanded(
+                  child: CalculatorCard(key: Key("widget_calculator_body")),
+                ),
+              ],
+            )
+          ],
         ),
-
-        /// 下拉加载
-        CupertinoSliverRefreshControl(
-          onRefresh: () async {
-            vibrate();
-            init(context);
-          },
-        ),
-
-        /// 数据
-        Consumer<CalculatorViewModel>(
-          builder: (_, calculatorViewModel, child) {
-            /// 加载数据的占位
-            // if (calculatorViewModel.calculatorDataLoading) {
-            //   return SliverFixedExtentList(
-            //     itemExtent: 280.w,
-            //     delegate: SliverChildBuilderDelegate(
-            //           (builder, index) {
-            //         return Align(
-            //           child: CupertinoActivityIndicator(radius: 12.sp),
-            //         );
-            //       },
-            //       childCount: 1,
-            //     ),
-            //   );
-            // }
-
-            CalculatorData? calculatorData = calculatorViewModel.calculatorData;
-
-            /// 有内容显示
-            return SliverToBoxAdapter(
-                child: CalculatorCard(
-                    key: Key("widget_calculator_body"),
-                    id: calculatorData?.id ?? -1,
-                    input: calculatorData?.input ?? '',
-                    result: calculatorData?.result ?? ''));
-          },
-        ),
-
-        /// 占位高度
-        SliverToBoxAdapter(child: SizedBox(height: 64.w)),
-      ],
+      ),
     );
   }
 }
@@ -169,19 +124,19 @@ class _CalculatorBodyState extends State<CalculatorBody> {
 /// 计算器卡片
 class CalculatorCard extends StatefulWidget {
   /// id
-  final int id;
+  final int? id;
 
   /// 输入
-  final String input;
+  final String? input;
 
   /// 结果
-  final String result;
+  final String? result;
 
   const CalculatorCard({
     Key? key,
-    required this.id,
-    required this.input,
-    required this.result,
+    this.id,
+    this.input,
+    this.result,
   }) : super(key: key);
 
   @override
@@ -189,484 +144,354 @@ class CalculatorCard extends StatefulWidget {
 }
 
 class _CalculatorCardState extends State<CalculatorCard> {
-  num _x = 0;
-  num _y = 0;
+  Decimal _x = Decimal.zero;
+  Decimal _y = Decimal.zero;
   bool _afterOption = false;
   String _input = "";
   String _result = "0";
   String _option = "";
 
-  /// type 1: number  2:option
-  void _input_pressed(int type, String value) {
-    debugPrint("input $type $value");
+  void _optionPressed(String value) {
+    debugPrint("input $value");
     setState(() {
-      if (type == 1) {
-        if (_afterOption) {
-          _x = num.parse(_result);
-          _y = num.parse(value);
-          _result = value;
-          _afterOption = false;
-        } else {
-          if (_result == '0') {
-            _result = value;
-            _x = num.parse(value);
+      switch (value) {
+        case 'cal_per':
+          if (!_afterOption && _y == Decimal.zero) {
+            clean();
           } else {
-            _result += value;
-            if (_option == "") {
-              _x = num.parse(_result);
-            } else {
-              _y = num.parse(_result);
-            }
-          }
-        }
-      } else if (type == 2) {
-        switch (value) {
-          case 'cal_del':
-            if (_result.length == 1) {
-              _result = '0';
-            } else {
-              _result = _result.substring(0, _result.length - 1);
-            }
-            break;
-          case 'cal_ce':
-            _result = '0';
-            break;
-          case 'cal_c':
-            _x = 0;
-            _y = 0;
-            _afterOption = false;
-            _input = "";
-            _result = "0";
-            _option = "";
-            break;
-          case 'cal_divide':
-            _x = num.parse(_result);
-            _afterOption = true;
-            _option = value;
-            _input = '$_result ÷';
-            break;
-          case 'cal_multiply':
-            _x = num.parse(_result);
-            _afterOption = true;
-            _option = value;
-            _input = '$_result x';
-            break;
-          case 'cal_subtract':
-            _x = num.parse(_result);
-            _afterOption = true;
-            _option = value;
-            _input = '$_result -';
-            break;
-          case 'cal_add':
-            _x = num.parse(_result);
-            _afterOption = true;
-            _option = value;
-            _input = '$_result +';
-            break;
-          case 'cal_equal':
-            if (_afterOption) {
-              _y = _x;
-              _afterOption = false;
-            }
             switch (_option) {
               case 'cal_divide':
-                _input = '$_x ÷ $_y =';
-                _x = _x / _y;
-                _result = _x.toString();
-                break;
               case 'cal_multiply':
-                _input = '$_x x $_y =';
-                _x = _x * _y;
-                _result = _x.toString();
+                _y = Decimal.parse((_y.toDouble() / 100).toString());
+                pressEqual();
                 break;
               case 'cal_subtract':
-                _input = '$_x - $_y =';
-                _x = _x - _y;
-                _result = _x.toString();
-                break;
               case 'cal_add':
-                _input = '$_x + $_y =';
-                _x = _x + _y;
-                _result = _x.toString();
                 break;
             }
-            break;
+          }
+          break;
+        case 'cal_ce':
+          _result = '0';
+          break;
+        case 'cal_c':
+          clean();
+          break;
+        case 'cal_del':
+          if (_result.length == 1) {
+            _result = '0';
+          } else {
+            _result = _result.substring(0, _result.length - 1);
+          }
+          break;
+        case 'cal_divide':
+          _x = Decimal.parse(_result);
+          _afterOption = true;
+          _option = value;
+          _input = '$_result ÷';
+          break;
+        case 'cal_multiply':
+          _x = Decimal.parse(_result);
+          _afterOption = true;
+          _option = value;
+          _input = '$_result x';
+          break;
+        case 'cal_subtract':
+          _x = Decimal.parse(_result);
+          _afterOption = true;
+          _option = value;
+          _input = '$_result -';
+          break;
+        case 'cal_add':
+          _x = Decimal.parse(_result);
+          _afterOption = true;
+          _option = value;
+          _input = '$_result +';
+          break;
+        case 'cal_equal':
+          pressEqual();
+          break;
+        case 'cal_one_divided':
+          if (_y != Decimal.zero) {
+            _x = _y;
+            _y = Decimal.zero;
+            _input = _x.toString();
+          }
+          if (_afterOption) {
+            _option = '';
+            _input = _x.toString();
+            _afterOption = false;
+          }
+          if (_input == '') {
+            _input = _x.toString();
+          }
+          _input = '1/($_input)';
+          _x = Decimal.parse((1 / _x.toDouble()).toString());
+          _result = _x.toString();
+          break;
+        case 'cal_square':
+          if (_y != Decimal.zero) {
+            _x = _y;
+            _y = Decimal.zero;
+            _input = _x.toString();
+          }
+          if (_afterOption) {
+            _option = '';
+            _input = _x.toString();
+            _afterOption = false;
+          }
+          if (_input == '') {
+            _input = _x.toString();
+          }
+          _input = 'sqr($_input)';
+          _x = _x * _x;
+          _result = _x.toString();
+          break;
+        case 'cal_square_root':
+          if (_y != Decimal.zero) {
+            _x = _y;
+            _y = Decimal.zero;
+            _input = _x.toString();
+          }
+          if (_afterOption) {
+            _option = '';
+            _input = _x.toString();
+            _afterOption = false;
+          }
+          if (_input == '') {
+            _input = _x.toString();
+          }
+          _input = '√($_input)';
+          _x = Decimal.parse(sqrt(_x.toDouble()).toString());
+          _result = _x.toString();
+          break;
+      }
+    });
+  }
+
+  void _numberPressed(String value) {
+    debugPrint("input $value");
+    setState(() {
+      if (_afterOption) {
+        _x = Decimal.parse(_result);
+        _y = Decimal.parse(value);
+        _result = value;
+        _afterOption = false;
+      } else {
+        if (_result == '0') {
+          _result = value;
+          _x = Decimal.parse(value);
+        } else {
+          _result += value;
+          if (_option == "") {
+            _x = Decimal.parse(_result);
+          } else {
+            _y = Decimal.parse(_result);
+          }
         }
       }
     });
   }
 
+  void clean() {
+    _x = Decimal.zero;
+    _y = Decimal.zero;
+    _afterOption = false;
+    _input = "";
+    _result = "0";
+    _option = "";
+  }
+
+  void pressEqual() {
+    if (_afterOption) {
+      _y = _x;
+      _afterOption = false;
+    }
+    switch (_option) {
+      case 'cal_divide':
+        _input = '$_x ÷ $_y =';
+        _x = Decimal.parse((_x.toDouble() / _y.toDouble()).toString());
+        _result = _x.toString();
+        break;
+      case 'cal_multiply':
+        _input = '$_x x $_y =';
+        _x = _x * _y;
+        _result = _x.toString();
+        break;
+      case 'cal_subtract':
+        _input = '$_x - $_y =';
+        _x = _x - _y;
+        _result = _x.toString();
+        break;
+      case 'cal_add':
+        _input = '$_x + $_y =';
+        _x = _x + _y;
+        _result = _x.toString();
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Slidable(
+    return Container(
       key: widget.key,
-      child: Container(
-        margin:
-            EdgeInsets.only(left: 24.w, right: 24.w, top: 0.w, bottom: 12.w),
-        child: GestureDetector(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: 320.w,
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(12.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            left: 20.w,
-                            right: 20.w,
-                            bottom: 10.w,
-                          ),
-                          child: Container(
-                            alignment: Alignment.bottomRight,
-                            child: Text(
-                              _input,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: true,
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color,
-                                fontSize: 16.sp,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                          child: Padding(
-                        padding: EdgeInsets.only(
-                          left: 20.w,
-                          right: 20.w,
-                          bottom: 15.w,
-                        ),
-                        child: Container(
-                          alignment: Alignment.bottomRight,
-                          child: Text(
-                            _result,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: true,
-                            style: TextStyle(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color,
-                                fontSize: 50.w,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                      )),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          key: const Key("cal_per"),
-                          color: Colors.white,
-                          margin: const EdgeInsets.all(5),
-                          constraints: BoxConstraints(
-                              minWidth: double.infinity, minHeight: 50.h),
-                          child: TextButton(
-                              style: ButtonStyle(
-                                  shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20)))),
-                              onPressed: () => _input_pressed(2, 'cal_per'),
-                              child: const Text("%")),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          constraints: BoxConstraints(
-                              minWidth: double.infinity, minHeight: 50.h),
-                          key: const Key("cal_ce"),
-                          color: Colors.white,
-                          margin: const EdgeInsets.all(5),
-                          child: TextButton(
-                              onPressed: () => _input_pressed(2, 'cal_ce'),
-                              child: const Text("CE")),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                            key: const Key("cal_c"),
-                            color: Colors.white,
-                            margin: const EdgeInsets.all(5),
-                            constraints: BoxConstraints(
-                                minWidth: double.infinity, minHeight: 50.h),
-                            child: TextButton(
-                                onPressed: () => _input_pressed(2, 'cal_c'),
-                                child: const Text("C"))),
-                      ),
-                      Expanded(
-                        child: Container(
-                            key: const Key("cal_del"),
-                            color: Colors.white,
-                            margin: const EdgeInsets.all(5),
-                            constraints: BoxConstraints(
-                                minWidth: double.infinity, minHeight: 50.h),
-                            child: TextButton(
-                                onPressed: () => _input_pressed(2, 'cal_del'),
-                                child: const Icon(Icons.backspace_outlined))),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_one_divided"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () =>
-                                      _input_pressed(2, 'cal_one_divided'),
-                                  child: const Text("⅟X")))),
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_square"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () =>
-                                      _input_pressed(2, 'cal_square'),
-                                  child: const Text("X²")))),
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_square_root"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () =>
-                                      _input_pressed(2, 'cal_square_root'),
-                                  child: const Text("√")))),
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_divide"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () =>
-                                      _input_pressed(2, 'cal_divide'),
-                                  child: const Text("÷"))))
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_seven"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () => _input_pressed(1, '7'),
-                                  child: const Text("7")))),
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_eight"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () => _input_pressed(1, '8'),
-                                  child: const Text("8")))),
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_nine"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () => _input_pressed(1, '9'),
-                                  child: const Text("9")))),
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_multiply"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () =>
-                                      _input_pressed(2, 'cal_multiply'),
-                                  child: const Text("×"))))
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_four"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () => _input_pressed(1, '4'),
-                                  child: const Text("4")))),
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_five"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () => _input_pressed(1, '5'),
-                                  child: const Text("5")))),
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_six"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () => _input_pressed(1, '6'),
-                                  child: const Text("6")))),
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_subtract"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () =>
-                                      _input_pressed(2, 'cal_subtract'),
-                                  child: const Text("-"))))
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_one"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () => _input_pressed(1, '1'),
-                                  child: const Text("1")))),
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_two"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () => _input_pressed(1, '2'),
-                                  child: const Text("2")))),
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_three"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () => _input_pressed(1, '3'),
-                                  child: const Text("3")))),
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_add"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () => _input_pressed(2, 'cal_add'),
-                                  child: const Text("+"))))
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_negative"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () =>
-                                      _input_pressed(2, 'cal_negative'),
-                                  child: const Text("∓")))),
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_zero"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () => _input_pressed(1, '0'),
-                                  child: const Text("0")))),
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_point"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () =>
-                                      _input_pressed(2, 'cal_point'),
-                                  child: const Text(".")))),
-                      Expanded(
-                          child: Container(
-                              key: const Key("cal_equal"),
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(5),
-                              constraints: BoxConstraints(
-                                  minWidth: double.infinity, minHeight: 50.h),
-                              child: TextButton(
-                                  onPressed: () =>
-                                      _input_pressed(2, 'cal_equal'),
-                                  child: const Text("="))))
-                    ],
-                  ),
-                ],
-              ),
-            ),
+      margin: EdgeInsets.only(left: 24.w, right: 24.w, top: 0.w, bottom: 12.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CalculatorInput(_input),
+            ],
           ),
-        ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CalculatorResult(_result),
+            ],
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CalculatorOperatorButton(
+                  key: const Key("cal_per"),
+                  onTap: () => _optionPressed('cal_per'),
+                  text: "%"),
+              CalculatorOperatorButton(
+                  key: const Key("cal_ce"),
+                  onTap: () => _optionPressed('cal_ce'),
+                  text: "CE"),
+              CalculatorOperatorButton(
+                  key: const Key("cal_c"),
+                  onTap: () => _optionPressed('cal_c'),
+                  text: "C"),
+              CalculatorOperatorButton(
+                  key: const Key("cal_del"),
+                  onTap: () => _optionPressed('cal_del'),
+                  child: Icon(
+                    Icons.backspace_outlined,
+                    color: Theme.of(context).textTheme.bodyText1!.color,
+                  )),
+            ],
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CalculatorOperatorButton(
+                  key: const Key("cal_one_divided"),
+                  onTap: () => _optionPressed('cal_one_divided'),
+                  text: "⅟X"),
+              CalculatorOperatorButton(
+                  key: const Key("cal_square"),
+                  onTap: () => _optionPressed('cal_square'),
+                  text: "X²"),
+              CalculatorOperatorButton(
+                  key: const Key("cal_square_root"),
+                  onTap: () => _optionPressed('cal_square_root'),
+                  text: "√"),
+              CalculatorOperatorButton(
+                  key: const Key("cal_divide"),
+                  onTap: () => _optionPressed('cal_divide'),
+                  text: "÷")
+            ],
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CalculatorButton(
+                  key: const Key("cal_seven"),
+                  onTap: () => _numberPressed('7'),
+                  text: "7"),
+              CalculatorButton(
+                  key: const Key("cal_eight"),
+                  onTap: () => _numberPressed('8'),
+                  text: "8"),
+              CalculatorButton(
+                  key: const Key("cal_nine"),
+                  onTap: () => _numberPressed('9'),
+                  text: "9"),
+              CalculatorOperatorButton(
+                  key: const Key("cal_multiply"),
+                  onTap: () => _optionPressed('cal_multiply'),
+                  text: "×")
+            ],
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CalculatorButton(
+                  key: const Key("cal_four"),
+                  onTap: () => _numberPressed('4'),
+                  text: "4"),
+              CalculatorButton(
+                  key: const Key("cal_five"),
+                  onTap: () => _numberPressed('5'),
+                  text: "5"),
+              CalculatorButton(
+                  key: const Key("cal_six"),
+                  onTap: () => _numberPressed('6'),
+                  text: "6"),
+              CalculatorOperatorButton(
+                  key: const Key("cal_subtract"),
+                  onTap: () => _optionPressed('cal_subtract'),
+                  text: "-")
+            ],
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CalculatorButton(
+                  key: const Key("cal_one"),
+                  onTap: () => _numberPressed('1'),
+                  text: "1"),
+              CalculatorButton(
+                  key: const Key("cal_two"),
+                  onTap: () => _numberPressed('2'),
+                  text: "2"),
+              CalculatorButton(
+                  key: const Key("cal_three"),
+                  onTap: () => _numberPressed('3'),
+                  text: "3"),
+              CalculatorOperatorButton(
+                  key: const Key("cal_add"),
+                  onTap: () => _optionPressed('cal_add'),
+                  text: "+")
+            ],
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CalculatorButton(
+                  key: const Key("cal_negative"),
+                  onTap: () => _optionPressed('cal_negative'),
+                  text: "∓"),
+              CalculatorButton(
+                  key: const Key("cal_zero"),
+                  onTap: () => _numberPressed('0'),
+                  text: "0"),
+              CalculatorButton(
+                  key: const Key("cal_point"),
+                  onTap: () => _optionPressed('cal_point'),
+                  text: "."),
+              CalculatorOperatorButton(
+                key: const Key("cal_equal"),
+                onTap: () => _optionPressed('cal_equal'),
+                child: Text("=",
+                    style: TextStyle(
+                        color: Theme.of(context)
+                            .buttonTheme
+                            .colorScheme!
+                            .primary)),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        Theme.of(context).buttonTheme.colorScheme!.onSecondary),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)))),
+              )
+            ],
+          ),
+        ],
       ),
     );
   }

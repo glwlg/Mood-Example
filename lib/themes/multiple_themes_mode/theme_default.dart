@@ -68,6 +68,13 @@ class AppThemeDefault {
       fillColor: MaterialStateProperty.all(const Color(0xFF111315)),
       overlayColor: MaterialStateProperty.all(const Color(0xFF111315)),
     ),
+    buttonTheme: const ButtonThemeData(
+      colorScheme: ColorScheme.light(
+          primary: Colors.white,
+          secondary: Color(0x45CCCCCC),
+          onSecondary: Color(0xFF646464),
+      ),
+    )
   );
 
   /// 深色主题
@@ -122,5 +129,11 @@ class AppThemeDefault {
       fillColor: MaterialStateProperty.all(const Color(0xFFEFEFEF)),
       overlayColor: MaterialStateProperty.all(const Color(0xFFEFEFEF)),
     ),
+    buttonTheme: const ButtonThemeData(
+        colorScheme: ColorScheme.dark(
+          primary: Color(0xFF3B3B3B),
+          secondary: Color(0xFF323232),
+          onSecondary: Color(0xFFBBBBBA),)
+    )
   );
 }

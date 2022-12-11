@@ -91,6 +91,7 @@ dependencies:
   remixicon: ^1.0.0
   sqflite_common_ffi: ^2.2.0+1
   window_manager: ^0.2.8
+  decimal: ^2.3.2
 
 dev_dependencies:
   flutter_test:

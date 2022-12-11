@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moodexample/common/utils.dart';
 import 'package:moodexample/view_models/calculator/calculator_view_model.dart';
 import 'package:moodexample/view_models/lifespan/lifespan_view_model.dart';
 
@@ -184,6 +185,9 @@ class _InitState extends State<Init> with WidgetsBindingObserver {
 
   /// 通知权限
   static Future<bool> displayNotificationRationale(BuildContext context) async {
+    if(isPC){
+      return false;
+    }
     bool userAuthorized = false;
     await showCupertinoDialog<void>(
       context: context,

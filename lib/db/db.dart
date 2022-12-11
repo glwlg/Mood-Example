@@ -43,6 +43,7 @@ class DB {
   Future<Database> createDatabase() async {
     String dbPath = await getDatabasesPath();
     String path = join(dbPath, _databaseName);
+    debugPrint("db path $path");
     Database db = await openDatabase(path,
         version: _version, onCreate: _onCreate, onUpgrade: _onUpgrade);
     return db;

@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     /// 首页
     const HomePage(),
     const MoodPage(),
-    const StatisticPage(),
+    // const StatisticPage(),
     const LifespanPage(),
     const CalculatorPage(),
   ];
@@ -155,14 +155,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       size: _tabIconSize,
                     ),
                   ),
-                  Tab(
-                    key: const Key("tab_statistic"),
-                    text: S.of(context).app_bottomNavigationBar_title_statistic,
-                    icon: Icon(
-                      Remix.bar_chart_line,
-                      size: _tabIconSize,
-                    ),
-                  ),
+                  // Tab(
+                  //   key: const Key("tab_statistic"),
+                  //   text: S.of(context).app_bottomNavigationBar_title_statistic,
+                  //   icon: Icon(
+                  //     Remix.bar_chart_line,
+                  //     size: _tabIconSize,
+                  //   ),
+                  // ),
                   Tab(
                     key: const Key("tab_life"),
                     text: S.of(context).app_bottomNavigationBar_title_lifespan,
