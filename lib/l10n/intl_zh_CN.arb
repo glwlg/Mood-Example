@@ -3,6 +3,7 @@
     "app_bottomNavigationBar_title_mood": "心情",
     "app_bottomNavigationBar_title_statistic": "统计",
     "app_bottomNavigationBar_title_lifespan": "人生",
+    "app_bottomNavigationBar_title_calculator": "计算器",
 
     "app_setting_database":"数据",
     "app_setting_database_export_data":"导出数据",
@@ -118,5 +119,6 @@
     "local_notification_schedule_body": "每1分钟你将看见此通知",
 
 
-    "lifespan_title": "人生"
+    "lifespan_title": "人生",
+    "calculator_title": "计算器"
 }

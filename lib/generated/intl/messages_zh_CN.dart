@@ -36,6 +36,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "app_bottomNavigationBar_title_calculator":
+            MessageLookupByLibrary.simpleMessage("计算器"),
         "app_bottomNavigationBar_title_home":
             MessageLookupByLibrary.simpleMessage("首页"),
         "app_bottomNavigationBar_title_lifespan":
@@ -107,6 +109,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "app_setting_theme_appearance_system":
             MessageLookupByLibrary.simpleMessage("跟随系统"),
         "app_setting_theme_themes": MessageLookupByLibrary.simpleMessage("多主题"),
+        "calculator_title": MessageLookupByLibrary.simpleMessage("计算器"),
         "home_help_article_content_1":
             MessageLookupByLibrary.simpleMessage("认知和意识过程产生对外界事物的态度..."),
         "home_help_article_content_2":

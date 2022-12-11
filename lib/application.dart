@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moodexample/common/utils.dart';
+import 'package:moodexample/view_models/calculator/calculator_view_model.dart';
 import 'package:moodexample/view_models/lifespan/lifespan_view_model.dart';
 
 /// Package
@@ -65,6 +65,7 @@ class _ApplicationState extends State<Application> with WindowListener {
         ChangeNotifierProvider(create: (_) => StatisticViewModel()),
         ChangeNotifierProvider(create: (_) => ApplicationViewModel()),
         ChangeNotifierProvider(create: (_) => LifespanViewModel()),
+        ChangeNotifierProvider(create: (_) => CalculatorViewModel()),
       ],
       builder: (context, child) {
         final watchApplicationViewModel = context.watch<ApplicationViewModel>();

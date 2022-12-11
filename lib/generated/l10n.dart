@@ -90,6 +90,16 @@ class S {
     );
   }
 
+  /// `Calculator`
+  String get app_bottomNavigationBar_title_calculator {
+    return Intl.message(
+      'Calculator',
+      name: 'app_bottomNavigationBar_title_calculator',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Database`
   String get app_setting_database {
     return Intl.message(
@@ -1035,6 +1045,16 @@ class S {
     return Intl.message(
       'Lifespan',
       name: 'lifespan_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Calculator`
+  String get calculator_title {
+    return Intl.message(
+      'Calculator',
+      name: 'calculator_title',
       desc: '',
       args: [],
     );

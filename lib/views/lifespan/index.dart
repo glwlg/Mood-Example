@@ -149,7 +149,7 @@ class _LifespanBodyState extends State<LifespanBody> {
             /// 有内容显示
             return SliverToBoxAdapter(
               child: LifespanCard(
-                key: Key("widget_lifespan_body_calendar"),
+                key: Key("widget_lifespan_body"),
                 id: lifespanData?.id ?? -1,
                 birthDay: lifespanData?.birthDay ?? '',
                 life: lifespanData?.life ?? 0,
@@ -194,21 +194,21 @@ class LifespanCard extends StatefulWidget {
 }
 
 class _LifespanCardState extends State<LifespanCard> {
-  String livedDay() {
+  String _livedDay() {
     int difference =
         DateTime.now().difference(DateTime.parse(widget.birthDay)).inMinutes;
     double yearDifference = difference / 60 / 24;
     return "${yearDifference.toStringAsFixed(2)}天";
   }
 
-  String dieDay() {
+  String _dieDay() {
     DateTime birthDay = DateTime.parse(widget.birthDay);
     DateTime dieDay = DateTime(birthDay.year + widget.life);
 
     return "${getDateStringCN(dieDay)} 死去";
   }
 
-  String leftDay() {
+  String _leftDay() {
     DateTime birthDay = DateTime.parse(widget.birthDay);
     DateTime dieDay = DateTime(birthDay.year + widget.life);
     int difference = dieDay.difference(DateTime.now()).inDays;
@@ -216,7 +216,7 @@ class _LifespanCardState extends State<LifespanCard> {
     return "$difference天";
   }
 
-  String livedDayPercent() {
+  String _livedDayPercent() {
     int livedDay =
         DateTime.now().difference(DateTime.parse(widget.birthDay)).inDays;
     int allDay = widget.life * 365;
@@ -452,7 +452,7 @@ class _LifespanCardState extends State<LifespanCard> {
                             bottom: 15.w,
                           ),
                           child: Text(
-                            livedDay(),
+                            _livedDay(),
                             maxLines: 5,
                             overflow: TextOverflow.ellipsis,
                             softWrap: true,
@@ -500,7 +500,7 @@ class _LifespanCardState extends State<LifespanCard> {
                             bottom: 15.w,
                           ),
                           child: Text(
-                            dieDay(),
+                            _dieDay(),
                             maxLines: 5,
                             overflow: TextOverflow.ellipsis,
                             softWrap: true,
@@ -548,7 +548,7 @@ class _LifespanCardState extends State<LifespanCard> {
                             bottom: 15.w,
                           ),
                           child: Text(
-                            leftDay(),
+                            _leftDay(),
                             maxLines: 5,
                             overflow: TextOverflow.ellipsis,
                             softWrap: true,
@@ -596,7 +596,7 @@ class _LifespanCardState extends State<LifespanCard> {
                             bottom: 15.w,
                           ),
                           child: Text(
-                            livedDayPercent(),
+                            _livedDayPercent(),
                             maxLines: 5,
                             overflow: TextOverflow.ellipsis,
                             softWrap: true,

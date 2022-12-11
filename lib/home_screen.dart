@@ -15,9 +15,8 @@ import 'package:moodexample/generated/l10n.dart';
 import 'package:moodexample/views/home/index.dart';
 import 'package:moodexample/views/mood/index.dart';
 import 'package:moodexample/views/statistic/index.dart';
-
-import 'views/lifespan/index.dart';
-import 'views/web_view/web_view.dart';
+import 'package:moodexample/views/lifespan/index.dart';
+import 'package:moodexample/views/calculator/index.dart';
 
 /// 首页底部Tabbar
 class HomeScreen extends StatefulWidget {
@@ -52,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     const MoodPage(),
     const StatisticPage(),
     const LifespanPage(),
+    const CalculatorPage(),
   ];
 
   @override
@@ -168,6 +168,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     text: S.of(context).app_bottomNavigationBar_title_lifespan,
                     icon: Icon(
                       Remix.lifebuoy_fill,
+                      size: _tabIconSize,
+                    ),
+                  ),
+                  Tab(
+                    key: const Key("tab_cal"),
+                    text: S.of(context).app_bottomNavigationBar_title_calculator,
+                    icon: Icon(
+                      Remix.calculator_fill,
                       size: _tabIconSize,
                     ),
                   ),

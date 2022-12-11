@@ -37,6 +37,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "app_bottomNavigationBar_title_calculator":
+            MessageLookupByLibrary.simpleMessage("Calculator"),
         "app_bottomNavigationBar_title_home":
             MessageLookupByLibrary.simpleMessage("Home"),
         "app_bottomNavigationBar_title_lifespan":
@@ -116,6 +118,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("System"),
         "app_setting_theme_themes":
             MessageLookupByLibrary.simpleMessage("Themes"),
+        "calculator_title": MessageLookupByLibrary.simpleMessage("Calculator"),
         "home_help_article_content_1": MessageLookupByLibrary.simpleMessage(
             "Cognitive and conscious processes produce attitudes towards external things..."),
         "home_help_article_content_2": MessageLookupByLibrary.simpleMessage(

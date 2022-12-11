@@ -25,7 +25,7 @@ LifespanData lifespanDataFromJson(String str) =>
 
 String lifespanDataToJson(LifespanData data) => json.encode(data.toJson());
 
-/// 心情详细数据
+/// 人生详细数据
 class LifespanData {
   LifespanData({
     required this.id,
