@@ -236,16 +236,16 @@ class _InitState extends State<Init> with WidgetsBindingObserver {
     bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
     if (!isAllowed) return;
     if (!mounted) return;
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: 1,
-        channelKey: 'notification',
-        title: S.of(context).local_notification_welcome_title,
-        body: S.of(context).local_notification_welcome_body,
-        actionType: ActionType.Default,
-        category: NotificationCategory.Event,
-      ),
-    );
+    // await AwesomeNotifications().createNotification(
+    //   content: NotificationContent(
+    //     id: 1,
+    //     channelKey: 'notification',
+    //     title: S.of(context).local_notification_welcome_title,
+    //     body: S.of(context).local_notification_welcome_body,
+    //     actionType: ActionType.Default,
+    //     category: NotificationCategory.Event,
+    //   ),
+    // );
   }
 
   /// 发送定时计划通知
@@ -255,25 +255,25 @@ class _InitState extends State<Init> with WidgetsBindingObserver {
     bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
     if (!isAllowed) return;
     if (!mounted) return;
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: -1,
-        // 随机ID
-        channelKey: 'notification',
-        title: S.of(context).local_notification_schedule_title,
-        body: S.of(context).local_notification_schedule_body,
-        actionType: ActionType.Default,
-        category: NotificationCategory.Event,
-      ),
-      schedule: NotificationCalendar(
-        second: 0,
-        // 当秒到达0时将会通知，意味着每个分钟的整点会通知
-        timeZone: localTimeZone,
-        allowWhileIdle: true,
-        preciseAlarm: true,
-        repeats: true,
-      ),
-    );
+    // await AwesomeNotifications().createNotification(
+    //   content: NotificationContent(
+    //     id: -1,
+    //     // 随机ID
+    //     channelKey: 'notification',
+    //     title: S.of(context).local_notification_schedule_title,
+    //     body: S.of(context).local_notification_schedule_body,
+    //     actionType: ActionType.Default,
+    //     category: NotificationCategory.Event,
+    //   ),
+    //   schedule: NotificationCalendar(
+    //     second: 0,
+    //     // 当秒到达0时将会通知，意味着每个分钟的整点会通知
+    //     timeZone: localTimeZone,
+    //     allowWhileIdle: true,
+    //     preciseAlarm: true,
+    //     repeats: true,
+    //   ),
+    // );
   }
 
   @override

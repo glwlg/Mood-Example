@@ -92,6 +92,7 @@ dependencies:
   sqflite_common_ffi: ^2.2.0+1
   window_manager: ^0.2.8
   decimal: ^2.3.2
+  assets_audio_player: ^3.0.6
 
 dev_dependencies:
   flutter_test:
@@ -122,6 +123,7 @@ flutter:
     - assets/images/
     - assets/images/onboarding/
     - assets/images/woolly/
+    - assets/images/life/
     - assets/3d/city/
     - assets/images/game/mini_fantasy/
     - assets/images/game/mini_fantasy/tiles/
@@ -130,6 +132,7 @@ flutter:
     - assets/images/game/mini_game/enemy/orc/
     - assets/images/game/mini_game/enemy/boss/
     - assets/images/game/mini_game/player/human/
+    - assets/music/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

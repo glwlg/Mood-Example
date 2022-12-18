@@ -1,8 +1,10 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 
 ///
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:moodexample/widgets/execute_widget/execute_widget.dart';
 import 'package:remixicon/remixicon.dart';
 
 ///
@@ -35,6 +37,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late Animation<double> _stepButtonAnimation;
   late CurvedAnimation _stepButtonCurve;
 
+  bool isStartTrain = true;
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
+  late AssetsAudioPlayer _assetsAudioPlayer;
+
   /// 默认状态 为关闭
   ValueNotifier<DrawerState> drawerState = ValueNotifier(DrawerState.closed);
 
@@ -47,11 +55,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   /// 页面
   final List<Widget> pages = [
     /// 首页
-    const HomePage(),
-    const MoodPage(),
+    // const HomePage(),
+    // const MoodPage(),
     // const StatisticPage(),
     const LifespanPage(),
-    const CalculatorPage(),
+    // const CalculatorPage(),
   ];
 
   @override
@@ -79,6 +87,31 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       length: pages.length,
       vsync: this,
     );
+
+    _animationController =
+        AnimationController(duration: const Duration(seconds: 900), vsync: this);
+
+    _animation = Tween<double>(
+      begin: 1,
+      end: 300,
+    ).animate(_animationController)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          // 动画完成后反转
+          _animationController.reverse();
+          // _animationController.reverse();
+          // _animationController.forward();
+        } else if (status == AnimationStatus.dismissed) {
+          // 反转回初始状态时继续播放，实现无限循环
+          _animationController.forward();
+        }
+      });
+    _animationController.forward();
+
+
+    _assetsAudioPlayer = AssetsAudioPlayer();
+    _assetsAudioPlayer.open(Audio("assets/music/Lantern.mp3"),
+        autoStart: true, showNotification: false, loopMode: LoopMode.single);
   }
 
   @override
@@ -99,166 +132,93 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       designSize: Size(AppTheme.wdp, AppTheme.hdp),
     );
     ThemeData appTheme = Theme.of(context);
+    final GlobalKey<ScaffoldState> _scaffoldKey =
+        new GlobalKey<ScaffoldState>();
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).tabBarTheme.labelColor,
-      body: IndexedStack(
-        index: _currentPage,
-        children: pages,
-      ),
-      bottomNavigationBar: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
-            appTheme.bottomNavigationBarTheme.backgroundColor ?? Colors.white,
-            appTheme.bottomNavigationBarTheme.backgroundColor ?? Colors.white,
-          ]),
-          boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 24),
-          ],
+    void callback() {
+      debugPrint("--callback-----");
+      // Scaffold.of(context).isDrawerOpen;
+      // _scaffoldKey.currentState!.closeDrawer();
+    }
+
+    void _settle(DragEndDetails details) {
+      debugPrint("--_settle-----");
+      ZoomDrawer.of(context)?.toggle.call();
+    }
+
+    // void _move(DragUpdateDetails details) {
+    //   debugPrint("--_move-----");
+    // }
+
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/life/bg1.png"),
+          fit: BoxFit.cover,
         ),
-        child: SafeArea(
-          child: Stack(
-            alignment: Alignment.centerLeft,
+      ),
+      child: Scaffold(
+          // backgroundColor: Theme.of(context).tabBarTheme.labelColor,
+          backgroundColor: Colors.transparent,
+          body: Stack(
+            clipBehavior: Clip.none,
             children: [
-              /// 菜单
-              TabBar(
-                // 震动或声音反馈
-                enableFeedback: true,
-                padding: EdgeInsets.only(left: 40.w, right: 0.w),
-                controller: _pageController,
-                indicatorColor: Colors.transparent,
-                labelStyle: TextStyle(
-                  height: 0.5.h,
-                  fontSize: 10.sp,
-                  fontWeight: FontWeight.bold,
+              const Positioned(child: LifespanPage()),
+              GestureDetector(
+                  // onHorizontalDragUpdate: _move,
+                  onHorizontalDragEnd: _settle,
+                  behavior: HitTestBehavior.translucent,
+                  excludeFromSemantics: true,
+                  // dragStartBehavior: DragStartBehavior.start,
+                  child: Container(
+                      // decoration: BoxDecoration(
+                      //   gradient: LinearGradient(
+                      //     colors: [
+                      //       const Color(0xFFFFBBBB),
+                      //       const Color(0xFFFFBBBB)
+                      //     ],
+                      //   ),
+                      // ),
+                      width: 20.sp),
                 ),
-                unselectedLabelStyle: TextStyle(
-                  height: 0.5.h,
-                  fontSize: 10.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-                tabs: [
-                  /// 菜单
-                  Tab(
-                    key: const Key("tab_home"),
-                    text: S.of(context).app_bottomNavigationBar_title_home,
-                    icon: Icon(
-                      Remix.home_line,
-                      size: _tabIconSize,
-                    ),
-                  ),
-                  Tab(
-                    key: const Key("tab_mood"),
-                    text: S.of(context).app_bottomNavigationBar_title_mood,
-                    icon: Icon(
-                      Remix.heart_3_line,
-                      size: _tabIconSize,
-                    ),
-                  ),
-                  // Tab(
-                  //   key: const Key("tab_statistic"),
-                  //   text: S.of(context).app_bottomNavigationBar_title_statistic,
-                  //   icon: Icon(
-                  //     Remix.bar_chart_line,
-                  //     size: _tabIconSize,
-                  //   ),
-                  // ),
-                  Tab(
-                    key: const Key("tab_life"),
-                    text: S.of(context).app_bottomNavigationBar_title_lifespan,
-                    icon: Icon(
-                      Remix.lifebuoy_fill,
-                      size: _tabIconSize,
-                    ),
-                  ),
-                  Tab(
-                    key: const Key("tab_cal"),
-                    text: S.of(context).app_bottomNavigationBar_title_calculator,
-                    icon: Icon(
-                      Remix.calculator_fill,
-                      size: _tabIconSize,
-                    ),
-                  ),
-                ],
-                onTap: (value) {
-                  switch (value) {
-                    case 2:
-                      // 统计菜单触发
-                      statistic.init(context);
-                      break;
-                  }
-                  setState(() {
-                    _currentPage = value;
-                  });
-                },
-              ),
-
-              // 侧栏
-              Semantics(
-                button: true,
-                label: "打开设置",
-                child: GestureDetector(
-                  key: const Key("tab_screen_left"),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: isDarkMode(context)
-                            ? [
-                                Colors.black12,
-                                Colors.black12,
-                              ]
-                            : [
-                                AppTheme.backgroundColor1,
-                                AppTheme.backgroundColor1,
-                              ],
-                      ),
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(14.sp),
-                        bottomRight: Radius.circular(14.sp),
-                      ),
-                    ),
-                    child: SizedBox(
-                      width: 36.w,
-                      height: 42.w,
-                      child: ValueListenableBuilder<DrawerState>(
-                        valueListenable:
-                            ZoomDrawer.of(context)!.stateNotifier ??
-                                drawerState,
-                        builder: (_, state, child) {
-                          if (state == DrawerState.closed) {
-                            _stepButtonController.reverse();
-                          } else {
-                            _stepButtonController.forward();
-                          }
-                          return AnimatedBuilder(
-                            animation: _stepButtonAnimation,
-                            builder: (context, child) => Transform.rotate(
-                              angle: _stepButtonCurve.value * 3.14,
-                              child: child,
-                            ),
-                            child: Icon(
-                              Remix.arrow_right_line,
-                              size: 14.sp,
-                              color: isDarkMode(context)
-                                  ? const Color(0xFFEFEFEF)
-                                  : Colors.black,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    /// 侧栏
-                    vibrate();
-                    ZoomDrawer.of(context)?.toggle.call();
-                  },
-                ),
-              ),
             ],
           ),
-        ),
-      ),
+          drawerEdgeDragWidth: 100.w,
+          appBar: AppBar(
+            centerTitle: true,
+            backgroundColor: Colors.transparent,
+            elevation: 0.0,
+            leading: IconButton(
+              icon: ImageIcon(AssetImage("assets/images/life/vector.png")),
+              color: Theme.of(context).textTheme.headline1!.color,
+              tooltip: 'Navigation',
+              onPressed: () => ZoomDrawer.of(context)?.toggle.call(),
+            ),
+            actions: [
+              RotationTransition(
+                  //设置动画的旋转中心
+                  alignment: Alignment.center,
+                  //动画控制器
+                  turns: _animation,
+                  child: IconButton(
+                      onPressed: () {
+                        debugPrint('Navigation button is pressed.');
+                        if (isStartTrain == false) {
+                          _animationController.forward();
+                          _assetsAudioPlayer.play();
+                        } else {
+                          _animationController.stop();
+                          _assetsAudioPlayer.pause();
+                        }
+                        setState(() {
+                          isStartTrain = !isStartTrain;
+                        });
+                      },
+                      color: Theme.of(context).textTheme.headline1!.color,
+                      icon: ImageIcon(
+                          AssetImage("assets/images/life/music.png")))),
+            ],
+          )),
     );
   }
 }

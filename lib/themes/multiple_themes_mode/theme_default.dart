@@ -22,7 +22,9 @@ class AppThemeDefault {
     // 文字
     textTheme: const TextTheme(
       headline1: TextStyle(color: Colors.black87),
+      subtitle2: TextStyle(color: Color(0xFF4E5969)),
       bodyText1: TextStyle(color: Colors.black87),
+      bodyText2: TextStyle(color: Color(0xff86909C)),
     ),
     // 主颜色
     primaryColor: primaryColor,
@@ -59,7 +61,7 @@ class AppThemeDefault {
     // 点击时背景高亮颜色
     highlightColor: Colors.transparent,
     // Card
-    cardColor: Colors.white,
+    cardColor: const Color(0x2AFFFFFF),
     // bottomSheet
     bottomSheetTheme:
         const BottomSheetThemeData(modalBackgroundColor: Color(0xFFF6F8FA)),
@@ -120,7 +122,7 @@ class AppThemeDefault {
     // 点击时背景高亮颜色
     highlightColor: Colors.transparent,
     // Card
-    cardColor: const Color(0xFF202427),
+    cardColor: const Color(0x5AFFFFFF),
     // bottomSheet
     bottomSheetTheme:
         const BottomSheetThemeData(modalBackgroundColor: Color(0xFF111315)),
