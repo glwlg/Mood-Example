@@ -4,21 +4,12 @@ import 'package:flutter/material.dart';
 ///
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
-import 'package:moodexample/widgets/execute_widget/execute_widget.dart';
-import 'package:remixicon/remixicon.dart';
 
 ///
 import 'package:moodexample/themes/app_theme.dart';
-import 'package:moodexample/common/utils.dart';
-import 'package:moodexample/views/statistic/index.dart' as statistic;
-import 'package:moodexample/generated/l10n.dart';
 
 /// 页面
-import 'package:moodexample/views/home/index.dart';
-import 'package:moodexample/views/mood/index.dart';
-import 'package:moodexample/views/statistic/index.dart';
 import 'package:moodexample/views/lifespan/index.dart';
-import 'package:moodexample/views/calculator/index.dart';
 
 /// 首页底部Tabbar
 class HomeScreen extends StatefulWidget {
@@ -41,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
 
-  late AssetsAudioPlayer _assetsAudioPlayer;
+  late AssetsAudioPlayer? _assetsAudioPlayer;
 
   /// 默认状态 为关闭
   ValueNotifier<DrawerState> drawerState = ValueNotifier(DrawerState.closed);
@@ -110,8 +101,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
 
     _assetsAudioPlayer = AssetsAudioPlayer();
-    _assetsAudioPlayer.open(Audio("assets/music/Lantern.mp3"),
-        autoStart: true, showNotification: false, loopMode: LoopMode.single);
+    // _assetsAudioPlayer?.open(Audio("assets/music/Lantern.mp3"),
+    //     autoStart: true, showNotification: false, loopMode: LoopMode.single);
   }
 
   @override
@@ -132,8 +123,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       designSize: Size(AppTheme.wdp, AppTheme.hdp),
     );
     ThemeData appTheme = Theme.of(context);
-    final GlobalKey<ScaffoldState> _scaffoldKey =
-        new GlobalKey<ScaffoldState>();
 
     void callback() {
       debugPrint("--callback-----");
@@ -153,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/images/life/bg1.png"),
+          image: AppTheme.backgroundImage,
           fit: BoxFit.cover,
         ),
       ),
@@ -205,10 +194,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         debugPrint('Navigation button is pressed.');
                         if (isStartTrain == false) {
                           _animationController.forward();
-                          _assetsAudioPlayer.play();
+                          _assetsAudioPlayer?.play();
                         } else {
                           _animationController.stop();
-                          _assetsAudioPlayer.pause();
+                          _assetsAudioPlayer?.pause();
                         }
                         setState(() {
                           isStartTrain = !isStartTrain;

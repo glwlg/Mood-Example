@@ -15,6 +15,8 @@ class AppThemeDefault {
   static const backgroundColor2 = Color(0xFFFCFBFC);
   static const backgroundColor3 = Color(0xFFF3F2F3);
 
+  static const backgroundImage = AssetImage("assets/images/life/bg1.png");
+
   /// 浅色主题
   static final lightTheme = ThemeData(
     // 字体

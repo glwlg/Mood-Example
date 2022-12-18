@@ -6,6 +6,9 @@ class AppThemeRed {
   /// 主颜色
   static const primaryColor = Color(0xFF9B545A);
 
+  static const backgroundImage = AssetImage("assets/images/life/bg2.png");
+
+
   /// 浅色主题
   static final lightTheme = ThemeData(
     // 字体

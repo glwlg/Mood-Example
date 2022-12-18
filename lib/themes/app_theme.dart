@@ -77,6 +77,8 @@ class AppTheme {
   static const backgroundColor2 = Color(0xFFFCFBFC);
   static const backgroundColor3 = Color(0xFFF3F2F3);
 
+  static const backgroundImage = AssetImage("assets/images/life/bg1.png");
+
   /// 多主题 light
   ThemeData? multipleThemesLightMode() {
     ThemeData? lightTheme =
